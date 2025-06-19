@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Online Sejarah PERGUNU Situbondo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #8B4513; /* Warna coklat tua untuk tema sejarah */
+            --color-secondary: #A0522D;
+            --color-tertiary: #CD853F;
+            --color-success: #4CAF50;
+            --color-error: #f44336;
+            --color-warning: #ff9800;
+            --color-info: #2196F3;
+            --color-dark: #1a1a2e;
+            --color-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Particle Background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        #celebration-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            pointer-events: none;
+            display: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            height: 80px;
+            margin-bottom: 15px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 50px;
+            background: linear-gradient(to right, var(--color-secondary), var(--color-tertiary));
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(160, 82, 45, 0.3);
+            margin: 5px;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(160, 82, 45, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(to right, var(--color-success), #2ecc71);
+        }
+
+        .btn-danger {
+            background: linear-gradient(to right, var(--color-error), #e74c3c);
+        }
+
+        .btn-warning {
+            background: linear-gradient(to right, var(--color-warning), #f39c12);
+        }
+
+        .btn-info {
+            background: linear-gradient(to right, var(--color-info), #3498db);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.2);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        /* Radio and Checkbox Styles */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .radio-option, .checkbox-option {
+            display: none;
+        }
+
+        .radio-label, .checkbox-label {
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:checked + .radio-label,
+        .checkbox-option:checked + .checkbox-label {
+            background: linear-gradient(to right, var(--color-secondary), var(--color-tertiary));
+            box-shadow: 0 4px 15px rgba(160, 82, 45, 0.3);
+        }
+
+        /* Animation Classes */
+        .slide-in {
+            animation: slideIn 0.5s forwards;
+        }
+
+        .slide-out {
+            animation: slideOut 0.5s forwards;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100%); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Timer Styles */
+        .timer {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .timer-warning {
+            color: var(--color-warning);
+            font-size: 28px;
+        }
+
+        .timer-danger {
+            color: var(--color-error);
+            font-size: 32px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 1000;
+            animation: slideUp 0.5s forwards;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        @keyframes slideUp {
+            from { bottom: -50px; opacity: 0; }
+            to { bottom: 20px; opacity: 1; }
+        }
+
+        /* Question Styles */
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .option.correct {
+            background: var(--color-success);
+            animation: correctAnswer 0.5s;
+        }
+
+        .option.incorrect {
+            background: var(--color-error);
+            animation: incorrectAnswer 0.5s;
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrectAnswer {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+            100% { transform: translateX(0); }
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Certificate Styles - REVISED FOR PRINTING */
+        .certificate {
+            background: white;
+            color: #333;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            width: 210mm; /* A4 width */
+            height: 297mm; /* A4 height */
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://raw.githubusercontent.com/pergunu/ujian-online/main/assets/images/certificate.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            page-break-after: avoid;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .certificate-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 60px;
+            margin: 0 auto;
+            width: 80%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .certificate-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-primary);
+            text-transform: uppercase;
+        }
+
+        .certificate-code {
+            font-size: 14px;
+            margin-bottom: 30px;
+            color: #555;
+            letter-spacing: 1px;
+        }
+
+        .certificate-recipient {
+            font-size: 48px;
+            margin: 20px 0;
+            font-weight: 600;
+            color: #333;
+            font-family: 'Dancing Script', cursive;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .certificate-body {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .certificate-score {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin: 20px 0;
+        }
+
+        .certificate-motivation {
+            font-style: italic;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .certificate-footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .certificate-signature {
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        .certificate-barcode {
+            margin: 15px auto;
+            height: 80px;
+            width: auto;
+        }
+
+        /* Floating Button Styles */
+        .floating-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--color-secondary), var(--color-tertiary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .floating-btn .tooltip {
+            position: absolute;
+            right: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .floating-btn:hover .tooltip {
+            opacity: 1;
+            right: 70px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Roman numeral styles */
+        .roman {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+
+        /* Print Styles - REVISED FOR BETTER PRINTING */
+        @media print {
+            body * {
+                visibility: hidden;
+                background: white !important;
+                color: black !important;
+            }
+            
+            .certificate, 
+            .certificate * {
+                visibility: visible;
+                background: transparent !important;
+                color: #333 !important;
+            }
+            
+            .certificate {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 210mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background-image: url('https://raw.githubusercontent.com/pergunu/ujian-online/main/assets/images/certificate.png') !important;
+                background-size: cover !important;
+                background-position: center !important;
+                background-repeat: no-repeat !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .certificate-content {
+                padding: 40px 60px !important;
+                margin: 0 auto !important;
+                width: 80% !important;
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+            }
+            
+            .certificate-recipient {
+                font-size: 48px !important;
+                font-family: 'Dancing Script', cursive !important;
+            }
+            
+            .floating-buttons, 
+            .results-summary, 
+            .result-actions {
+                display: none !important;
+            }
+            
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .certificate-content {
+                padding: 30px;
+                width: 90%;
+            }
+            
+            .certificate-title {
+                font-size: 24px;
+            }
+            
+            .certificate-recipient {
+                font-size: 36px;
+            }
+            
+            .floating-buttons {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .floating-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .form-control {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            
+            .certificate-content {
+                padding: 20px;
+                width: 95%;
+            }
+            
+            .certificate-title {
+                font-size: 20px;
+            }
+            
+            .certificate-recipient {
+                font-size: 28px;
+            }
+        }
+
+        /* Admin Panel Specific Styles */
+        .admin-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-section h5 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .admin-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .admin-control-group {
+            margin-bottom: 15px;
+        }
+
+        .admin-control-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .admin-control-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .admin-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--color-success);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .participant-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .participant-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .participant-item:last-child {
+            border-bottom: none;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .data-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Checkbox styles for participant selection */
+        .select-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .select-all-checkbox {
+            margin-right: 5px;
+        }
+
+        .participant-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Search Box */
+        .search-box {
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        /* Edit Participant Modal */
+        .edit-participant-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-participant-content {
+            background: white;
+            color: #333;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .edit-participant-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Certificate Validation Section */
+        .certificate-validation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .validation-result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .valid-certificate {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .invalid-certificate {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #d6e9c6;
+        }
+
+        .alert-danger {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="celebration-particles"></div>
+    
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="card slide-in">
+            <div class="header">
+                <img src="https://raw.githubusercontent.com/pergunu/ujian-online/main/assets/images/logo.png" alt="PERGUNU Logo" class="logo">
+                <h1>Ujian Online Sejarah PERGUNU Situbondo</h1>
+            </div>
+            
+            <div id="greeting-message">
+                <p id="greeting-text">Selamat datang di sistem ujian online Sejarah PERGUNU Situbondo, Sistem tes kemampuan akademik untuk pelajar. Silakan masukkan kode login untuk melanjutkan.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="login-code" class="form-label">Kode Login</label>
+                <input type="password" id="login-code" class="form-control" placeholder="Masukkan kode login">
+                <small class="text-muted">Kode login diberikan oleh admin</small>
+            </div>
+            
+            <button id="login-btn" class="btn">Masuk</button>
+        </div>
+        
+        <!-- Terms Screen (Hidden Initially) -->
+        <div id="terms-screen" class="card" style="display: none;">
+            <h2>Peraturan dan Kebijakan Ujian Online</h2>
+            <div class="terms-content" style="max-height: 300px; overflow-y: auto; margin: 20px 0; padding: 15px; background: rgba(0, 0, 0, 0.1); border-radius: 8px;">
+                <p>1. Ujian ini dikembangkan oleh Cendhanu Tim Kreator PERGUNU Situbondo.</p>
+                <p>2. Peserta wajib mengisi data diri dengan benar dan lengkap.</p>
+                <p>3. Dilarang keras melakukan kecurangan selama ujian berlangsung.</p>
+                <p>4. Waktu ujian akan berjalan terus dan tidak dapat dihentikan.</p>
+                <p>5. Jawaban yang sudah dipilih tidak dapat diubah.</p>
+                <p>6. Soal yang tidak dijawab akan dianggap salah.</p>
+                <p>7. Hasil ujian akan ditampilkan setelah waktu habis atau peserta menyelesaikan ujian.</p>
+                <p>8. Sertifikat akan diberikan kepada peserta yang menyelesaikan ujian.</p>
+                <p>9. Keputusan panitia ujian bersifat mutlak dan tidak dapat diganggu gugat.</p>
+            </div>
+            
+            <div class="form-group">
+                <input type="checkbox" id="agree-terms" class="checkbox-option">
+                <label for="agree-terms" class="checkbox-label">Saya menyetujui</label>
+            </div>
+            
+            <button id="continue-btn" class="btn" disabled>Lanjut Ikut Ujian</button>
+        </div>
+        
+        <!-- Participant Form (Hidden Initially) -->
+        <div id="participant-form" class="card" style="display: none;">
+            <h2>Formulir Data Peserta</h2>
+            <p>Silakan isi data diri Anda dengan benar. Data ini akan digunakan untuk sertifikat ujian.</p>
+            
+            <div class="form-group">
+                <label for="fullname" class="form-label">Nama Lengkap</label>
+                <input type="text" id="fullname" class="form-control" placeholder="Masukkan nama lengkap" pattern="[A-Za-z ]+" title="Hanya huruf diperbolehkan" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <div class="radio-group">
+                    <input type="radio" id="status-student" name="status" value="pelajar" class="radio-option" checked>
+                    <label for="status-student" class="radio-label">Pelajar</label>
+                </div>
+            </div>
+            
+            <!-- Student Fields -->
+            <div id="student-fields">
+                <div class="form-group">
+                    <label for="school-name" class="form-label">Nama Sekolah</label>
+                    <input type="text" id="school-name" class="form-control" placeholder="Masukkan nama sekolah">
+                </div>
+                
+                <div class="form-group">
+                    <label for="student-id" class="form-label">NIS (Nomor Induk Siswa)</label>
+                    <input type="text" id="student-id" class="form-control" placeholder="Masukkan NIS" pattern="[0-9]+" title="Hanya angka diperbolehkan" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tujuan Ikut Ujian</label>
+                    <div class="radio-group">
+                        <input type="radio" id="purpose-task" name="purpose" value="Tugas Sekolah" class="radio-option">
+                        <label for="purpose-task" class="radio-label">Tugas Sekolah</label>
+                        
+                        <input type="radio" id="purpose-exam" name="purpose" value="Tugas Ulangan" class="radio-option">
+                        <label for="purpose-exam" class="radio-label">Tugas Ulangan</label>
+                        
+                        <input type="radio" id="purpose-test" name="purpose" value="Tes dan Belajar" class="radio-option">
+                        <label for="purpose-test" class="radio-label">Tes dan Belajar</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tingkat Sekolah</label>
+                    <div class="radio-group">
+                        <input type="radio" id="level-elementary" name="level" value="SD" class="radio-option">
+                        <label for="level-elementary" class="radio-label">SD</label>
+                        
+                        <input type="radio" id="level-junior" name="level" value="SMP" class="radio-option">
+                        <label for="level-junior" class="radio-label">SMP</label>
+                        
+                        <input type="radio" id="level-senior" name="level" value="SMA/SMK" class="radio-option">
+                        <label for="level-senior" class="radio-label">SMA/SMK</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grade Selection (Will be shown based on school level) -->
+            <div id="grade-selection" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Kelas</label>
+                    <div class="radio-group" id="grade-options">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subject Selection -->
+            <div id="subject-selection" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Pilih Jenis Ujian</label>
+                    <div class="radio-group">
+                        <input type="radio" id="subject-history" name="subject" value="Sejarah" class="radio-option" checked>
+                        <label for="subject-history" class="radio-label">Sejarah</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Admin Information -->
+            <div class="form-group" id="admin-info" style="margin-top: 30px;">
+                <p>Informasi berkala dari admin:</p>
+                <div style="padding: 15px; background: rgba(0, 0, 0, 0.1); border-radius: 8px;">
+                    <p id="admin-message">Tidak ada informasi terbaru saat ini.</p>
+                </div>
+            </div>
+            
+            <button id="save-participant-btn" class="btn" disabled>Simpan & Ikut Ujian</button>
+        </div>
+        
+        <!-- Exam Screen (Hidden Initially) -->
+        <div id="exam-screen" class="card" style="display: none;">
+            <div class="timer" id="exam-timer">02:00:00</div>
+            
+            <div class="question-container">
+                <div class="question" id="question-text">Memuat soal...</div>
+                <div id="question-image-container" style="margin-bottom: 15px;"></div>
+                
+                <div class="options" id="options-container">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                
+                <div class="explanation" id="explanation-text">
+                    <!-- Explanation will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="exam-controls">
+                <button id="finish-exam-btn" class="btn btn-danger">Selesaikan Ujian Sekarang</button>
+                <button id="skip-question-btn" class="btn btn-warning">Lewati Soal</button>
+                <button id="unanswered-btn" class="btn btn-info">Soal Belum Dijawab</button>
+            </div>
+        </div>
+        
+        <!-- Results Screen (Hidden Initially) -->
+        <div id="results-screen" class="card" style="display: none;">
+            <h2>Hasil Ujian</h2>
+            
+            <div class="results-summary">
+                <p>Nama: <span id="result-name"></span></p>
+                <p>Status: <span id="result-status"></span></p>
+                <p>Tingkat: <span id="result-level"></span></p>
+                <p>Kelas: <span id="result-grade"></span></p>
+                <p>Mata Ujian: <span id="result-subject"></span></p>
+                <p>Jumlah Soal: <span id="total-questions"></span></p>
+                <p>Jawaban Benar: <span id="correct-answers"></span></p>
+                <p>Jawaban Salah: <span id="wrong-answers"></span></p>
+                <p>Tidak Dijawab: <span id="unanswered-questions"></span></p>
+                <p>Nilai: <span id="exam-score"></span></p>
+            </div>
+            
+            <div class="certificate-container" id="certificate-container" style="display: none;">
+                <!-- Certificate will be generated here -->
+            </div>
+            
+            <div class="result-actions">
+                <button id="print-certificate-btn" class="btn btn-success">Cetak Sertifikat</button>
+                <button id="retake-exam-btn" class="btn btn-info">Ulangi Ujian</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <button class="floating-btn" id="whatsapp-btn">
+            <i class="fab fa-whatsapp"></i>
+            <span class="tooltip">Chat Admin</span>
+        </button>
+        
+        <button class="floating-btn" id="admin-panel-btn">
+            <i class="fas fa-cog"></i>
+            <span class="tooltip">Admin Panel</span>
+        </button>
+    </div>
+    
+    <!-- Admin Panel Modal -->
+    <div class="modal" id="admin-panel-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Kontrol Panel Admin</h3>
+                <button class="modal-close" id="close-admin-panel-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="admin-panel-code" class="form-label">Kode Admin</label>
+                    <input type="password" id="admin-panel-code" class="form-control" placeholder="Masukkan kode admin" style="color: #333;">
+                    <button id="submit-admin-panel-code" class="btn">Masuk</button>
+                </div>
+                
+                <div id="admin-panel-content" style="display: none;">
+                    <div class="admin-section">
+                        <h5>Pengaturan Kode</h5>
+                        <div class="form-group">
+                            <label class="form-label">Kode Login Baru</label>
+                            <input type="password" id="new-login-code" class="form-control" placeholder="Masukkan kode login baru" style="color: #333;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Kode Admin Baru</label>
+                            <input type="password" id="new-admin-code" class="form-control" placeholder="Masukkan kode admin baru" style="color: #333;">
+                        </div>
+                        
+                        <button id="save-codes-btn" class="btn btn-success">Simpan Kode</button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h5>Pengaturan Ujian</h5>
+                        <div class="admin-controls">
+                            <div class="admin-control-group">
+                                <label class="admin-control-label">Durasi Ujian (menit)</label>
+                                <input type="number" id="exam-duration" class="admin-control-input" value="120" min="5" max="300">
+                            </div>
+                            <div class="admin-control-group">
+                                <label class="admin-control-label">Jumlah Soal</label>
+                                <select id="question-count" class="admin-control-input">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="admin-control-group">
+                            <label class="admin-control-label">Acak Soal</label>
+                            <div class="admin-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="randomize-questions" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span id="randomize-status">Aktif</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h5>Pengaturan Konten</h5>
+                        <div class="form-group">
+                            <label class="form-label">Pesan Pembuka</label>
+                            <textarea id="greeting-message-input" class="form-control" rows="3" style="color: #333;">Selamat datang di sistem ujian online Sejarah PERGUNU Situbondo. Silakan masukkan kode login untuk melanjutkan.</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Pesan Informasi Berkala</label>
+                            <textarea id="admin-message-input" class="form-control" rows="3" style="color: #333;">Tidak ada informasi terbaru saat ini.</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Ketua PERGUNU</label>
+                            <input type="text" id="chairman-name" class="form-control" value="Moh. Nuril Hudha, S.Pd., M.Si." style="color: #333;">
+                        </div>
+                        <button id="save-content-btn" class="btn btn-success">Simpan Perubahan</button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h5>Manajemen Peserta</h5>
+                        <div class="search-box">
+                            <input type="text" id="participant-search" class="search-input" placeholder="Cari peserta berdasarkan nama, NIS, atau kode sertifikat...">
+                        </div>
+                        <div class="participant-actions">
+                            <button id="select-all-participants" class="btn btn-info">
+                                <input type="checkbox" id="select-all-checkbox" class="select-all-checkbox">
+                                Pilih Semua
+                            </button>
+                            <button id="edit-selected-participants" class="btn btn-warning" disabled>
+                                <i class="fas fa-edit"></i> Edit Terpilih
+                            </button>
+                            <button id="delete-selected-participants" class="btn btn-danger" disabled>
+                                <i class="fas fa-trash"></i> Hapus Terpilih
+                            </button>
+                        </div>
+                        <div class="participant-list">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th width="30px">
+                                            <!-- Select all checkbox -->
+                                        </th>
+                                        <th>Tanggal</th>
+                                        <th>Nama</th>
+                                        <th>NIS</th>
+                                        <th>Status</th>
+                                        <th>Tingkat</th>
+                                        <th>Kelas</th>
+                                        <th>Mata Ujian</th>
+                                        <th>Nilai</th>
+                                        <th>Kode Sertifikat</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="participants-table-body">
+                                    <!-- Participant data will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h5>Validasi Sertifikat</h5>
+                        <div class="certificate-validation">
+                            <div class="form-group">
+                                <label class="form-label">Masukkan Kode Sertifikat</label>
+                                <input type="text" id="certificate-code-input" class="form-control" placeholder="Masukkan kode sertifikat" style="color: #333;">
+                                <button id="validate-certificate-btn" class="btn btn-info">Validasi</button>
+                            </div>
+                            <div id="validation-result" class="validation-result" style="display: none;">
+                                <!-- Validation result will be shown here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h5>Aktifkan/Nonaktifkan Ujian</h5>
+                        <div class="admin-control-group">
+                            <label class="admin-control-label">Sejarah</label>
+                            <div class="admin-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-history" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span id="history-status">Aktif</span>
+                            </div>
+                        </div>
+                        <button id="save-settings-btn" class="btn btn-success">Simpan Pengaturan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Participant Modal -->
+    <div class="edit-participant-modal" id="edit-participant-modal">
+        <div class="edit-participant-content">
+            <span class="edit-participant-close" id="close-edit-participant-modal">&times;</span>
+            <h3>Edit Data Peserta</h3>
+            
+            <div class="form-group">
+                <label for="edit-fullname" class="form-label">Nama Lengkap</label>
+                <input type="text" id="edit-fullname" class="form-control" style="color: #333;" pattern="[A-Za-z ]+" title="Hanya huruf diperbolehkan" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <div class="radio-group">
+                    <input type="radio" id="edit-status-student" name="edit-status" value="pelajar" class="radio-option" checked>
+                    <label for="edit-status-student" class="radio-label">Pelajar</label>
+                </div>
+            </div>
+            
+            <div id="edit-student-fields">
+                <div class="form-group">
+                    <label for="edit-school-name" class="form-label">Nama Sekolah</label>
+                    <input type="text" id="edit-school-name" class="form-control" style="color: #333;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-student-id" class="form-label">NIS (Nomor Induk Siswa)</label>
+                    <input type="text" id="edit-student-id" class="form-control" style="color: #333;" pattern="[0-9]+" title="Hanya angka diperbolehkan" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tujuan Ikut Ujian</label>
+                    <div class="radio-group">
+                        <input type="radio" id="edit-purpose-task" name="edit-purpose" value="Tugas Sekolah" class="radio-option">
+                        <label for="edit-purpose-task" class="radio-label">Tugas Sekolah</label>
+                        
+                        <input type="radio" id="edit-purpose-exam" name="edit-purpose" value="Tugas Ulangan" class="radio-option">
+                        <label for="edit-purpose-exam" class="radio-label">Tugas Ulangan</label>
+                        
+                        <input type="radio" id="edit-purpose-test" name="edit-purpose" value="Tes dan Belajar" class="radio-option">
+                        <label for="edit-purpose-test" class="radio-label">Tes dan Belajar</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tingkat Sekolah</label>
+                    <div class="radio-group">
+                        <input type="radio" id="edit-level-elementary" name="edit-level" value="SD" class="radio-option">
+                        <label for="edit-level-elementary" class="radio-label">SD</label>
+                        
+                        <input type="radio" id="edit-level-junior" name="edit-level" value="SMP" class="radio-option">
+                        <label for="edit-level-junior" class="radio-label">SMP</label>
+                        
+                        <input type="radio" id="edit-level-senior" name="edit-level" value="SMA/SMK" class="radio-option">
+                        <label for="edit-level-senior" class="radio-label">SMA/SMK</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Kelas</label>
+                    <div class="radio-group" id="edit-grade-options">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Mata Ujian</label>
+                <select id="edit-subject" class="form-control" style="color: #333;">
+                    <option value="Sejarah">Sejarah</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-score" class="form-label">Nilai</label>
+                <input type="number" id="edit-score" class="form-control" min="0" max="100" style="color: #333;">
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-certificate-code" class="form-label">Kode Sertifikat</label>
+                <input type="text" id="edit-certificate-code" class="form-control" style="color: #333;" readonly>
+            </div>
+            
+            <button id="save-edit-participant-btn" class="btn btn-success">Simpan Perubahan</button>
+            
+            <input type="hidden" id="edit-participant-index">
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="time-warning" style="display: none;">
+        Perhatian! Ujian akan berakhir dalam waktu 10 menit. Mohon pastikan semua jawaban telah diselesaikan dan diperiksa sebelum waktu habis. Terima kasih atas partisipasi Anda.
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="button-sound" src="https://github.com/pergunu/pergunusmart/raw/main/assets/audio/audiotombol.mp3" preload="auto"></audio>
+    <audio id="correct-answer-sound" src="https://github.com/pergunu/pergunusmart/raw/main/assets/audio/jawabanbenar.mp3" preload="auto"></audio>
+    <audio id="wrong-answer-sound" src="https://github.com/pergunu/pergunusmart/raw/main/assets/audio/jawabansalah.mp3" preload="auto"></audio>
+    <audio id="certificate-sound" src="https://github.com/pergunu/pergunusmart/raw/main/assets/audio/applause.mp3" preload="auto"></audio>
+    <audio id="opening-sound" src="https://github.com/pergunu/ujian-online/raw/main/assets/audio/opening.mp3" preload="auto"></audio>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Global variables
+        let currentScreen = 'welcome';
+        let participantData = {};
+        let examData = {};
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let answeredQuestions = {};
+        let examTimer;
+        let examTimeLeft = 120 * 60; // 120 minutes in seconds
+        let selectedParticipants = [];
+        
+        // Audio elements
+        const buttonSound = document.getElementById('button-sound');
+        const correctAnswerSound = document.getElementById('correct-answer-sound');
+        const wrongAnswerSound = document.getElementById('wrong-answer-sound');
+        const certificateSound = document.getElementById('certificate-sound');
+        const openingSound = document.getElementById('opening-sound');
+        
+        // Default codes (should be changed in production)
+        const DEFAULT_LOGIN_CODE = '12345';
+        const DEFAULT_ADMIN_PANEL_CODE = '65614222';
+        
+        // Store participants data
+        let participantsData = JSON.parse(localStorage.getItem('participantsData')) || [];
+        
+        // Store admin settings
+        let adminSettings = JSON.parse(localStorage.getItem('adminSettings')) || {
+            loginCode: DEFAULT_LOGIN_CODE,
+            adminCode: DEFAULT_ADMIN_PANEL_CODE,
+            examDuration: 120,
+            questionCount: 20,
+            randomizeQuestions: true,
+            greetingMessage: "Selamat datang di sistem ujian online Sejarah PERGUNU Situbondo. Silakan masukkan kode login untuk melanjutkan.",
+            adminMessage: "Tidak ada informasi terbaru saat ini.",
+            chairmanName: "Moh. Nuril Hudha, S.Pd., M.Si.",
+            enabledSubjects: {
+                Sejarah: true
+            }
+        };
+
+        // Question bank structure with levels (Sejarah only)
+        let QUESTION_BANK = {
+            'SD': {
+                'Sejarah': [
+                    {
+                        question: "Siapa yang dikenal sebagai Bapak Proklamator Indonesia?",
+                        options: [
+                            "A. Soekarno dan Mohammad Hatta",
+                            "B. Soeharto dan B.J. Habibie",
+                            "C. Ki Hajar Dewantara dan Dewi Sartika",
+                            "D. Diponegoro dan Cut Nyak Dien",
+                            "E. Kartini dan RA. Wiratmo Soekito"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Soekarno dan Mohammad Hatta dikenal sebagai Bapak Proklamator Indonesia karena mereka yang membacakan teks Proklamasi Kemerdekaan Indonesia pada tanggal 17 Agustus 1945."
+                    },
+                    {
+                        question: "Pada tanggal berapa Proklamasi Kemerdekaan Indonesia dibacakan?",
+                        options: [
+                            "A. 17 Agustus 1945",
+                            "B. 27 Desember 1949",
+                            "C. 1 Juni 1945",
+                            "D. 28 Oktober 1928",
+                            "E. 10 November 1945"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Proklamasi Kemerdekaan Indonesia dibacakan oleh Soekarno dan Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur No. 56, Jakarta."
+                    }
+                ]
+            },
+            'SMP': {
+                'Sejarah': [
+                    {
+                        question: "Peristiwa Rengasdengklok terjadi karena...",
+                        options: [
+                            "A. Para pemuda ingin mempercepat proklamasi kemerdekaan",
+                            "B. Jepang menyerah kepada Sekutu",
+                            "C. Belanda ingin kembali menjajah Indonesia",
+                            "D. Terjadi pertempuran antara pejuang dan Jepang",
+                            "E. Soekarno dan Hatta ditangkap oleh Jepang"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Peristiwa Rengasdengklok terjadi pada 16 Agustus 1945 ketika para pemuda membawa Soekarno dan Hatta ke Rengasdengklok untuk mendesak mereka segera memproklamasikan kemerdekaan Indonesia, jauh dari pengaruh Jepang."
+                    },
+                    {
+                        question: "BPUPKI dibentuk oleh Jepang pada tanggal...",
+                        options: [
+                            "A. 1 Maret 1945",
+                            "B. 29 April 1945",
+                            "C. 17 Agustus 1945",
+                            "D. 10 November 1945",
+                            "E. 28 Oktober 1928"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "BPUPKI (Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia) dibentuk oleh Jepang pada tanggal 29 April 1945 sebagai upaya Jepang untuk mendapatkan dukungan rakyat Indonesia dalam Perang Pasifik."
+                    }
+                ]
+            },
+            'SMA/SMK': {
+                'Sejarah': [
+                    {
+                        question: "Perhatikan pernyataan berikut tentang latar belakang munculnya Perang Dingin: 1) Perbedaan ideologi antara Blok Barat dan Blok Timur, 2) Persaingan untuk memperluas pengaruh di dunia, 3) Ketidakpuasan terhadap hasil Perang Dunia II, 4) Perebutan wilayah jajahan di Asia dan Afrika. Manakah yang merupakan faktor utama penyebab Perang Dingin?",
+                        options: [
+                            "A. 1 dan 2",
+                            "B. 1 dan 3",
+                            "C. 2 dan 3",
+                            "D. 2 dan 4",
+                            "E. 3 dan 4"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Faktor utama penyebab Perang Dingin adalah perbedaan ideologi antara Blok Barat (liberal-kapitalis) dengan Blok Timur (komunis-sosialis) dan persaingan untuk memperluas pengaruh di dunia pasca Perang Dunia II."
+                    },
+                    {
+                        question: "Perhatikan pernyataan berikut tentang dampak Perang Dingin: 1) Munculnya negara-negara non-blok, 2) Perlombaan senjata nuklir, 3) Penyatuan Jerman, 4) Berakhirnya kolonialisme di Asia dan Afrika. Manakah yang merupakan dampak langsung dari Perang Dingin?",
+                        options: [
+                            "A. 1 dan 2",
+                            "B. 1 dan 3",
+                            "C. 2 dan 3",
+                            "D. 2 dan 4",
+                            "E. 3 dan 4"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Dampak langsung Perang Dingin adalah munculnya negara-negara non-blok yang tidak memihak kedua blok dan perlombaan senjata nuklir antara AS dan Uni Soviet. Penyatuan Jerman terjadi setelah Perang Dingin berakhir, sedangkan berakhirnya kolonialisme lebih disebabkan oleh Perang Dunia II."
+                    }
+                ]
+            }
+        };
+
+        // Motivational messages based on score
+        const MOTIVATIONAL_MESSAGES = {
+            '90-100': 'Sempurna! Anda sangat luar biasa dalam menguasai materi sejarah. Pertahankan prestasi ini.',
+            '80-89': 'Hasil yang sangat baik! Anda telah menunjukkan pemahaman yang mendalam tentang sejarah.',
+            '70-79': 'Kerja bagus! Anda memiliki pemahaman yang baik tentang materi sejarah ini.',
+            '60-69': 'Hasil yang cukup baik. Tingkatkan lagi pemahaman Anda untuk hasil yang lebih baik.',
+            '50-59': 'Anda sudah memahami dasar-dasarnya. Terus berlatih untuk meningkatkan pemahaman sejarah Anda.',
+            '0-49': 'Jangan menyerah! Gunakan hasil ini sebagai motivasi untuk belajar sejarah lebih giat lagi.'
+        };
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize particles.js for background
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Initialize celebration particles (hidden by default)
+            particlesJS('celebration-particles', {
+                "particles": {
+                    "number": {
+                        "value": 150,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"]
+                    },
+                    "shape": {
+                        "type": ["circle", "triangle", "star"],
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.7,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 4,
+                            "size_min": 0.3,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": false
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": false
+                        },
+                        "onclick": {
+                            "enable": false
+                        },
+                        "resize": true
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Load admin settings
+            loadAdminSettings();
+            
+            // Set greeting message from admin settings
+            document.getElementById('greeting-text').textContent = adminSettings.greetingMessage;
+            document.getElementById('admin-message').textContent = adminSettings.adminMessage;
+            
+            // Event listeners for buttons with sound
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Play button sound if not disabled
+                    if (!this.disabled) {
+                        buttonSound.currentTime = 0;
+                        buttonSound.play().catch(e => console.log("Button sound prevented:", e));
+                    }
+                });
+            });
+            
+            // Event listeners
+            document.getElementById('login-btn').addEventListener('click', handleLogin);
+            document.getElementById('agree-terms').addEventListener('change', toggleContinueButton);
+            document.getElementById('continue-btn').addEventListener('click', showParticipantForm);
+            
+            // Status radio buttons
+            document.querySelectorAll('input[name="status"]').forEach(radio => {
+                radio.addEventListener('change', toggleParticipantFields);
+            });
+            
+            // School level radio buttons
+            document.querySelectorAll('input[name="level"]').forEach(radio => {
+                radio.addEventListener('change', showGradeSelection);
+            });
+            
+            document.getElementById('save-participant-btn').addEventListener('click', startExam);
+            document.getElementById('finish-exam-btn').addEventListener('click', finishExam);
+            document.getElementById('skip-question-btn').addEventListener('click', skipQuestion);
+            document.getElementById('unanswered-btn').addEventListener('click', showUnansweredQuestions);
+            document.getElementById('print-certificate-btn').addEventListener('click', printCertificate);
+            document.getElementById('retake-exam-btn').addEventListener('click', retakeExam);
+            
+            // Floating buttons
+            document.getElementById('whatsapp-btn').addEventListener('click', contactAdmin);
+            document.getElementById('admin-panel-btn').addEventListener('click', showAdminPanelModal);
+            
+            // Modal close buttons
+            document.getElementById('close-admin-panel-modal').addEventListener('click', hideAdminPanelModal);
+            document.getElementById('close-edit-participant-modal').addEventListener('click', hideEditParticipantModal);
+            
+            // Modal submit buttons
+            document.getElementById('submit-admin-panel-code').addEventListener('click', submitAdminPanelCode);
+            
+            // Check form validity when fields change
+            document.getElementById('fullname').addEventListener('input', function() {
+                // Convert input to uppercase automatically
+                this.value = this.value.toUpperCase();
+                checkParticipantFormValidity();
+            });
+            
+            document.getElementById('school-name').addEventListener('input', checkParticipantFormValidity);
+            document.getElementById('student-id').addEventListener('input', checkParticipantFormValidity);
+            document.querySelectorAll('input[name="purpose"]').forEach(radio => {
+                radio.addEventListener('change', checkParticipantFormValidity);
+            });
+            document.querySelectorAll('input[name="level"]').forEach(radio => {
+                radio.addEventListener('change', checkParticipantFormValidity);
+            });
+            document.querySelectorAll('input[name="grade"]').forEach(radio => {
+                radio.addEventListener('change', checkParticipantFormValidity);
+            });
+            document.querySelectorAll('input[name="subject"]').forEach(radio => {
+                radio.addEventListener('change', checkParticipantFormValidity);
+            });
+
+            // Admin panel toggle switches
+            document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const statusElement = document.getElementById(`${this.id}-status`);
+                    statusElement.textContent = this.checked ? 'Aktif' : 'Nonaktif';
+                });
+            });
+
+            // Admin panel buttons
+            document.getElementById('save-codes-btn').addEventListener('click', saveCodes);
+            document.getElementById('save-content-btn').addEventListener('click', saveContent);
+            document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
+            
+            // Participant management buttons
+            document.getElementById('select-all-participants').addEventListener('click', toggleSelectAllParticipants);
+            document.getElementById('edit-selected-participants').addEventListener('click', editSelectedParticipants);
+            document.getElementById('delete-selected-participants').addEventListener('click', deleteSelectedParticipants);
+            document.getElementById('validate-certificate-btn').addEventListener('click', validateCertificate);
+            
+            // Search functionality
+            document.getElementById('participant-search').addEventListener('input', searchParticipants);
+            
+            // Edit participant form
+            document.getElementById('save-edit-participant-btn').addEventListener('click', saveEditedParticipant);
+            document.querySelectorAll('input[name="edit-status"]').forEach(radio => {
+                radio.addEventListener('change', toggleEditParticipantFields);
+            });
+            document.querySelectorAll('input[name="edit-level"]').forEach(radio => {
+                radio.addEventListener('change', showEditGradeSelection);
+            });
+            
+            // Load participants data for admin panel
+            loadParticipantsData();
+            
+            // Auto uppercase for edit fullname field
+            document.getElementById('edit-fullname').addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+        });
+        
+        // Functions
+        function loadAdminSettings() {
+            // Load exam duration
+            document.getElementById('exam-duration').value = adminSettings.examDuration;
+            
+            // Load question count
+            document.getElementById('question-count').value = adminSettings.questionCount;
+            
+            // Load randomize questions setting
+            document.getElementById('randomize-questions').checked = adminSettings.randomizeQuestions;
+            document.getElementById('randomize-status').textContent = adminSettings.randomizeQuestions ? 'Aktif' : 'Nonaktif';
+            
+            // Load greeting message
+            document.getElementById('greeting-message-input').value = adminSettings.greetingMessage;
+            
+            // Load admin message
+            document.getElementById('admin-message-input').value = adminSettings.adminMessage;
+            
+            // Load chairman name
+            document.getElementById('chairman-name').value = adminSettings.chairmanName;
+            
+            // Load subject toggle
+            document.getElementById('toggle-history').checked = adminSettings.enabledSubjects.Sejarah;
+            document.getElementById('history-status').textContent = adminSettings.enabledSubjects.Sejarah ? 'Aktif' : 'Nonaktif';
+        }
+        
+        function saveParticipantsData() {
+            localStorage.setItem('participantsData', JSON.stringify(participantsData));
+        }
+        
+        function saveAdminSettings() {
+            localStorage.setItem('adminSettings', JSON.stringify(adminSettings));
+        }
+        
+        function handleLogin() {
+            const loginCode = document.getElementById('login-code').value;
+            
+            if (loginCode === adminSettings.loginCode) {
+                // Play opening sound
+                openingSound.play().catch(e => console.log("Opening sound prevented:", e));
+                
+                // Hide welcome screen with slide out animation
+                document.getElementById('welcome-screen').classList.add('slide-out');
+                
+                // Show terms screen after animation completes
+                setTimeout(() => {
+                    document.getElementById('welcome-screen').style.display = 'none';
+                    document.getElementById('terms-screen').style.display = 'block';
+                    document.getElementById('terms-screen').classList.add('slide-in');
+                    currentScreen = 'terms';
+                }, 500);
+            } else {
+                alert('Kode login salah. Silakan coba lagi.');
+            }
+        }
+        
+        function toggleContinueButton() {
+            const agreeCheckbox = document.getElementById('agree-terms');
+            document.getElementById('continue-btn').disabled = !agreeCheckbox.checked;
+        }
+        
+        function showParticipantForm() {
+            // Hide terms screen with slide out animation
+            document.getElementById('terms-screen').classList.add('slide-out');
+            
+            // Show participant form after animation completes
+            setTimeout(() => {
+                document.getElementById('terms-screen').style.display = 'none';
+                document.getElementById('participant-form').style.display = 'block';
+                document.getElementById('participant-form').classList.add('slide-in');
+                currentScreen = 'participant';
+            }, 500);
+        }
+        
+        function toggleParticipantFields() {
+            // Only student status is available now
+            document.getElementById('student-fields').style.display = 'block';
+            checkParticipantFormValidity();
+        }
+        
+        function showGradeSelection() {
+            const level = document.querySelector('input[name="level"]:checked').value;
+            const gradeOptions = document.getElementById('grade-options');
+            
+            // Clear previous options
+            gradeOptions.innerHTML = '';
+            
+            // Add options based on level
+            if (level === 'SD') {
+                addGradeOption('grade-4', 'Kelas <span class="roman">IV</span>', '4');
+                addGradeOption('grade-5', 'Kelas <span class="roman">V</span>', '5');
+                addGradeOption('grade-6', 'Kelas <span class="roman">VI</span>', '6');
+            } else if (level === 'SMP') {
+                addGradeOption('grade-7', 'Kelas <span class="roman">VII</span>', '7');
+                addGradeOption('grade-8', 'Kelas <span class="roman">VIII</span>', '8');
+                addGradeOption('grade-9', 'Kelas <span class="roman">IX</span>', '9');
+            } else if (level === 'SMA/SMK') {
+                addGradeOption('grade-10', 'Kelas <span class="roman">X</span>', '10');
+                addGradeOption('grade-11', 'Kelas <span class="roman">XI</span>', '11');
+                addGradeOption('grade-12', 'Kelas <span class="roman">XII</span>', '12');
+            }
+            
+            document.getElementById('grade-selection').style.display = 'block';
+            checkParticipantFormValidity();
+        }
+        
+        function addGradeOption(id, label, value) {
+            const container = document.getElementById('grade-options');
+            
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.id = id;
+            radio.name = 'grade';
+            radio.value = value;
+            radio.className = 'radio-option';
+            
+            const radioLabel = document.createElement('label');
+            radioLabel.htmlFor = id;
+            radioLabel.className = 'radio-label';
+            radioLabel.innerHTML = label;
+            
+            // Add event listener for grade selection
+            radio.addEventListener('change', function() {
+                document.getElementById('subject-selection').style.display = 'block';
+                checkParticipantFormValidity();
+            });
+            
+            container.appendChild(radio);
+            container.appendChild(radioLabel);
+        }
+        
+        function checkParticipantFormValidity() {
+            let isValid = true;
+            
+            // Check common fields
+            const fullname = document.getElementById('fullname').value.trim();
+            if (!fullname || !/^[A-Za-z ]+$/.test(fullname)) {
+                isValid = false;
+            }
+            
+            // Check student fields
+            if (!document.getElementById('school-name').value.trim()) {
+                isValid = false;
+            }
+            
+            const studentId = document.getElementById('student-id').value.trim();
+            if (!studentId || !/^[0-9]+$/.test(studentId)) {
+                isValid = false;
+            }
+            
+            if (!document.querySelector('input[name="purpose"]:checked')) {
+                isValid = false;
+            }
+            
+            if (!document.querySelector('input[name="level"]:checked')) {
+                isValid = false;
+            }
+            
+            if (!document.querySelector('input[name="grade"]:checked')) {
+                isValid = false;
+            }
+            
+            if (!document.querySelector('input[name="subject"]:checked')) {
+                isValid = false;
+            }
+            
+            document.getElementById('save-participant-btn').disabled = !isValid;
+        }
+        
+        function startExam() {
+            // Collect participant data
+            participantData = {
+                fullname: document.getElementById('fullname').value.trim(),
+                status: 'pelajar',
+                purpose: document.querySelector('input[name="purpose"]:checked')?.value,
+                level: document.querySelector('input[name="level"]:checked')?.value,
+                grade: document.querySelector('input[name="grade"]:checked')?.value,
+                subject: document.querySelector('input[name="subject"]:checked')?.value,
+                school: document.getElementById('school-name')?.value.trim(),
+                studentId: document.getElementById('student-id')?.value.trim(),
+                examDate: new Date().toISOString()
+            };
+            
+            // Load questions based on level - hanya Sejarah
+            if (participantData.level && QUESTION_BANK[participantData.level]['Sejarah']) {
+                questions = QUESTION_BANK[participantData.level]['Sejarah'];
+            } else {
+                // Default questions
+                questions = QUESTION_BANK['SD']['Sejarah'];
+            }
+            
+            // Randomize questions if setting is enabled
+            if (adminSettings.randomizeQuestions) {
+                questions = shuffleArray(questions).slice(0, adminSettings.questionCount);
+            } else {
+                questions = questions.slice(0, adminSettings.questionCount);
+            }
+            
+            // Initialize exam data
+            examData = {
+                startTime: new Date(),
+                answered: 0,
+                correct: 0,
+                wrong: 0,
+                unanswered: questions.length,
+                answers: Array(questions.length).fill(null)
+            };
+            
+            // Set exam time from admin settings
+            examTimeLeft = adminSettings.examDuration * 60;
+            
+            // Hide participant form with slide out animation
+            document.getElementById('participant-form').classList.add('slide-out');
+            
+            // Show exam screen after animation completes
+            setTimeout(() => {
+                document.getElementById('participant-form').style.display = 'none';
+                document.getElementById('exam-screen').style.display = 'block';
+                document.getElementById('exam-screen').classList.add('slide-in');
+                currentScreen = 'exam';
+                
+                // Start timer
+                startTimer();
+                
+                // Load first question
+                loadQuestion(0);
+            }, 500);
+        }
+        
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        function startTimer() {
+            // Update timer display immediately
+            updateTimerDisplay();
+            
+            // Start timer interval
+            examTimer = setInterval(function() {
+                examTimeLeft--;
+                updateTimerDisplay();
+                
+                // Check if time is up
+                if (examTimeLeft <= 0) {
+                    clearInterval(examTimer);
+                    finishExam();
+                }
+                
+                // Show warning when 10 minutes left
+                if (examTimeLeft === 600) { // 10 minutes = 600 seconds
+                    showTimeWarning();
+                }
+                
+                // Hide warning when 1 minute left
+                if (examTimeLeft === 60) {
+                    hideTimeWarning();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const hours = Math.floor(examTimeLeft / 3600);
+            const minutes = Math.floor((examTimeLeft % 3600) / 60);
+            const seconds = examTimeLeft % 60;
+            
+            const timerElement = document.getElementById('exam-timer');
+            timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change style based on remaining time
+            if (examTimeLeft <= 600) { // 10 minutes or less
+                timerElement.classList.add('timer-warning');
+                
+                if (examTimeLeft <= 60) { // 1 minute or less
+                    timerElement.classList.remove('timer-warning');
+                    timerElement.classList.add('timer-danger');
+                }
+            } else {
+                timerElement.classList.remove('timer-warning', 'timer-danger');
+            }
+        }
+        
+        function showTimeWarning() {
+            const notification = document.getElementById('time-warning');
+            notification.style.display = 'block';
+            
+            // Auto hide after 9 minutes (540 seconds)
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 540 * 1000);
+        }
+        
+        function hideTimeWarning() {
+            document.getElementById('time-warning').style.display = 'none';
+        }
+        
+        function loadQuestion(index) {
+            if (index < 0 || index >= questions.length) return;
+            
+            currentQuestionIndex = index;
+            const question = questions[index];
+            
+            // Update question text
+            document.getElementById('question-text').textContent = `Soal ${index + 1}: ${question.question}`;
+            
+            // Clear previous image if exists
+            const imageContainer = document.getElementById('question-image-container');
+            imageContainer.innerHTML = '';
+            
+            // Add image if exists
+            if (question.image) {
+                const img = document.createElement('img');
+                img.src = question.image;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '200px';
+                img.style.marginBottom = '15px';
+                img.style.display = 'block';
+                imageContainer.appendChild(img);
+            }
+            
+            // Clear previous options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            // Add new options
+            question.options.forEach((option, i) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                
+                // Check if this question was already answered
+                if (examData.answers[index] !== null) {
+                    if (examData.answers[index] === i) {
+                        if (i === question.correctAnswer) {
+                            optionElement.classList.add('correct');
+                        } else {
+                            optionElement.classList.add('incorrect');
+                        }
+                    } else if (i === question.correctAnswer) {
+                        optionElement.classList.add('correct');
+                    }
+                    
+                    // Show explanation if answered
+                    document.getElementById('explanation-text').style.display = 'block';
+                    document.getElementById('explanation-text').innerHTML = `<strong>Penjelasan:</strong> ${question.explanation}`;
+                } else {
+                    // Add click event for unanswered questions
+                    optionElement.addEventListener('click', function() {
+                        selectAnswer(index, i);
+                    });
+                }
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Hide explanation if question not answered
+            if (examData.answers[index] === null) {
+                document.getElementById('explanation-text').style.display = 'none';
+            }
+        }
+        
+        function selectAnswer(questionIndex, answerIndex) {
+            const question = questions[questionIndex];
+            
+            // Record answer
+            examData.answers[questionIndex] = answerIndex;
+            
+            // Update counters
+            examData.answered++;
+            examData.unanswered--;
+            
+            if (answerIndex === question.correctAnswer) {
+                examData.correct++;
+                // Play correct answer sound
+                correctAnswerSound.currentTime = 0;
+                correctAnswerSound.play().catch(e => console.log("Correct answer sound prevented:", e));
+            } else {
+                examData.wrong++;
+                // Play wrong answer sound
+                wrongAnswerSound.currentTime = 0;
+                wrongAnswerSound.play().catch(e => console.log("Wrong answer sound prevented:", e));
+            }
+            
+            // Reload question to show result
+            loadQuestion(questionIndex);
+            
+            // Auto move to next question after delay if not last question
+            if (questionIndex < questions.length - 1) {
+                setTimeout(() => {
+                    loadQuestion(questionIndex + 1);
+                }, 2000);
+            }
+        }
+        
+        function skipQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            }
+        }
+        
+        function showUnansweredQuestions() {
+            // Find first unanswered question
+            const unansweredIndex = examData.answers.findIndex(answer => answer === null);
+            
+            if (unansweredIndex !== -1) {
+                loadQuestion(unansweredIndex);
+            } else {
+                alert('Semua soal sudah dijawab.');
+            }
+        }
+        
+        function finishExam() {
+            clearInterval(examTimer);
+            
+            // Calculate unanswered questions
+            examData.unanswered = examData.answers.filter(answer => answer === null).length;
+            
+            // Generate certificate code
+            const certificateCode = generateUniqueCode();
+            
+            // Add participant to data store
+            const score = Math.round((examData.correct / questions.length) * 100);
+            participantsData.push({
+                ...participantData,
+                score: score,
+                examDate: new Date().toISOString(),
+                certificateCode: certificateCode
+            });
+            saveParticipantsData();
+            
+            // Hide exam screen with slide out animation
+            document.getElementById('exam-screen').classList.add('slide-out');
+            
+            // Show results screen after animation completes
+            setTimeout(() => {
+                document.getElementById('exam-screen').style.display = 'none';
+                document.getElementById('results-screen').style.display = 'block';
+                document.getElementById('results-screen').classList.add('slide-in');
+                currentScreen = 'results';
+                
+                // Display results
+                displayResults();
+                
+                // Generate certificate
+                generateCertificate(certificateCode);
+                
+                // Show celebration particles
+                showCelebration();
+                
+                // Play certificate sound (applause)
+                certificateSound.currentTime = 0;
+                certificateSound.play().catch(e => console.log("Certificate sound prevented:", e));
+            }, 500);
+        }
+        
+        function displayResults() {
+            document.getElementById('result-name').textContent = participantData.fullname;
+            document.getElementById('result-status').textContent = 'Pelajar';
+            document.getElementById('result-level').textContent = participantData.level || '-';
+            document.getElementById('result-grade').textContent = participantData.grade ? `Kelas ${participantData.grade}` : '-';
+            document.getElementById('result-subject').textContent = participantData.subject || '-';
+            document.getElementById('total-questions').textContent = questions.length;
+            document.getElementById('correct-answers').textContent = examData.correct;
+            document.getElementById('wrong-answers').textContent = examData.wrong;
+            document.getElementById('unanswered-questions').textContent = examData.unanswered;
+            
+            // Calculate score (percentage)
+            const score = Math.round((examData.correct / questions.length) * 100);
+            document.getElementById('exam-score').textContent = `${score}%`;
+        }
+        
+        function generateCertificate(certificateCode) {
+            const certificateContainer = document.getElementById('certificate-container');
+            certificateContainer.innerHTML = '';
+            
+            // Calculate score
+            const score = Math.round((examData.correct / questions.length) * 100);
+            
+            // Get current date
+            const now = new Date();
+            const dateString = now.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }).replace(/\//g, '');
+            
+            // Get motivational message based on score
+            let motivation = '';
+            for (const range in MOTIVATIONAL_MESSAGES) {
+                const [min, max] = range.split('-').map(Number);
+                if (score >= min && score <= max) {
+                    motivation = MOTIVATIONAL_MESSAGES[range];
+                    break;
+                }
+            }
+            
+            // Create certificate HTML
+            const certificate = document.createElement('div');
+            certificate.className = 'certificate';
+            
+            certificate.innerHTML = `
+                <div class="certificate-content">
+                    <h1 class="certificate-title">SERTIFIKAT PRESTASI</h1>
+                    <p class="certificate-code">${formatName(participantData.fullname)}/PELAJAR/${participantData.level || 'UMUM'}/${participantData.subject || 'UMUM'}/${dateString}/${certificateCode}/PERGUNU-STB</p>
+                    <p>Diberikan Kepada</p>
+                    <h2 class="certificate-recipient">${formatName(participantData.fullname)}</h2>
+                    <p class="certificate-body">
+                        Atas Partisipasi & Pencapaian Luar Biasa Dalam<br>
+                        Ujian Sejarah Pergunu Situbondo
+                    </p>
+                    <p class="certificate-body">
+                        Sebagai penghargaan atas dedikasi dalam memahami materi sejarah dan mengasah pengetahuan sejarah,
+                        sertifikat ini diberikan sebagai motivasi untuk terus belajar dari masa lalu.
+                    </p>
+                    <div class="certificate-score">Nilai: ${score}%</div>
+                    <p class="certificate-motivation">${motivation}</p>
+                    <div class="certificate-footer">
+                        <p>Ditetapkan di: Situbondo, ${now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <div class="certificate-signature">
+                            <p>Ketua Pergunu Situbondo</p>
+                            <p><strong>${adminSettings.chairmanName}</strong></p>
+                        </div>
+                        <img src="https://raw.githubusercontent.com/pergunu/ujian-online/main/assets/images/BARCODE.png" alt="Barcode" class="certificate-barcode">
+                    </div>
+                </div>
+            `;
+            
+            certificateContainer.appendChild(certificate);
+            certificateContainer.style.display = 'block';
+        }
+        
+        function showCelebration() {
+            // Show celebration particles
+            document.getElementById('celebration-particles').style.display = 'block';
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                document.getElementById('celebration-particles').style.display = 'none';
+            }, 5000);
+        }
+        
+        function formatName(name) {
+            return name.split(' ').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            ).join(' ');
+        }
+        
+        function generateUniqueCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            
+            for (let i = 0; i < 4; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            result += '-';
+            
+            for (let i = 0; i < 4; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            return result;
+        }
+        
+        function printCertificate() {
+            // Hide floating buttons
+            document.querySelector('.floating-buttons').style.display = 'none';
+            
+            // Hide other elements in results screen
+            document.querySelector('.results-summary').style.display = 'none';
+            document.querySelector('.result-actions').style.display = 'none';
+            
+            // Print the certificate
+            window.print();
+            
+            // Show elements again after printing
+            setTimeout(() => {
+                document.querySelector('.floating-buttons').style.display = 'flex';
+                document.querySelector('.results-summary').style.display = 'block';
+                document.querySelector('.result-actions').style.display = 'block';
+            }, 500);
+        }
+        
+        function retakeExam() {
+            // Hide results screen with slide out animation
+            document.getElementById('results-screen').classList.add('slide-out');
+            
+            // Show participant form after animation completes
+            setTimeout(() => {
+                document.getElementById('results-screen').style.display = 'none';
+                document.getElementById('participant-form').style.display = 'block';
+                document.getElementById('participant-form').classList.add('slide-in');
+                currentScreen = 'participant';
+                
+                // Reset timer
+                examTimeLeft = adminSettings.examDuration * 60;
+            }, 500);
+        }
+        
+        function contactAdmin() {
+            const message = encodeURIComponent("Assalamualaikum mas admin, saya mau tanya sesuatu nih...");
+            window.open(`https://wa.me/6285647709114?text=${message}`, '_blank');
+        }
+        
+        function showAdminPanelModal() {
+            document.getElementById('admin-panel-modal').style.display = 'flex';
+        }
+        
+        function hideAdminPanelModal() {
+            document.getElementById('admin-panel-modal').style.display = 'none';
+        }
+        
+        function submitAdminPanelCode() {
+            const code = document.getElementById('admin-panel-code').value;
+            
+            if (code === adminSettings.adminCode) {
+                // Show admin panel content
+                document.getElementById('admin-panel-content').style.display = 'block';
+            } else {
+                alert('Kode admin salah. Silakan coba lagi.');
+            }
+        }
+
+        function loadParticipantsData() {
+            const tableBody = document.getElementById('participants-table-body');
+            tableBody.innerHTML = '';
+            
+            if (participantsData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="10" style="text-align: center;">Belum ada data peserta</td></tr>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedData = [...participantsData].sort((a, b) => 
+                new Date(b.examDate) - new Date(a.examDate));
+            
+            sortedData.forEach((participant, index) => {
+                const date = new Date(participant.examDate);
+                const dateStr = date.toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const row = document.createElement('tr');
+                row.dataset.index = index;
+                row.innerHTML = `
+                    <td>
+                        <input type="checkbox" class="select-checkbox" data-index="${index}" onchange="toggleParticipantSelection(${index})">
+                    </td>
+                    <td>${dateStr}</td>
+                    <td>${participant.fullname}</td>
+                    <td>${participant.studentId || '-'}</td>
+                    <td>Pelajar</td>
+                    <td>${participant.level || '-'}</td>
+                    <td>${participant.grade ? `Kelas ${participant.grade}` : '-'}</td>
+                    <td>${participant.subject || '-'}</td>
+                    <td>${participant.score}%</td>
+                    <td>${participant.certificateCode || '-'}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Reset selected participants
+            selectedParticipants = [];
+            updateParticipantActionButtons();
+        }
+        
+        function toggleParticipantSelection(index) {
+            const checkbox = document.querySelector(`.select-checkbox[data-index="${index}"]`);
+            if (checkbox.checked) {
+                if (!selectedParticipants.includes(index)) {
+                    selectedParticipants.push(index);
+                }
+            } else {
+                selectedParticipants = selectedParticipants.filter(i => i !== index);
+            }
+            
+            // Update select all checkbox
+            updateSelectAllCheckbox();
+            
+            // Update action buttons
+            updateParticipantActionButtons();
+        }
+        
+        function toggleSelectAllParticipants() {
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+            const checkboxes = document.querySelectorAll('.select-checkbox');
+            
+            selectAllCheckbox.checked = !selectAllCheckbox.checked;
+            const isChecked = selectAllCheckbox.checked;
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+                const index = parseInt(checkbox.dataset.index);
+                
+                if (isChecked) {
+                    if (!selectedParticipants.includes(index)) {
+                        selectedParticipants.push(index);
+                    }
+                } else {
+                    selectedParticipants = selectedParticipants.filter(i => i !== index);
+                }
+            });
+            
+            // Update action buttons
+            updateParticipantActionButtons();
+        }
+        
+        function updateSelectAllCheckbox() {
+            const checkboxes = document.querySelectorAll('.select-checkbox');
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+            
+            if (checkboxes.length === 0) {
+                selectAllCheckbox.checked = false;
+                return;
+            }
+            
+            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+            selectAllCheckbox.checked = allChecked;
+        }
+        
+        function updateParticipantActionButtons() {
+            const hasSelection = selectedParticipants.length > 0;
+            
+            document.getElementById('edit-selected-participants').disabled = !hasSelection;
+            document.getElementById('delete-selected-participants').disabled = !hasSelection;
+        }
+        
+        function editSelectedParticipants() {
+            if (selectedParticipants.length === 0) return;
+            
+            // For now, we'll just edit the first selected participant
+            // In a real app, you might want to implement bulk editing
+            const index = selectedParticipants[0];
+            editParticipant(index);
+        }
+        
+        function editParticipant(index) {
+            const participant = participantsData[index];
+            
+            // Fill the edit form
+            document.getElementById('edit-fullname').value = participant.fullname;
+            
+            // Set status to student (only option now)
+            document.getElementById('edit-status-student').checked = true;
+            document.getElementById('edit-student-fields').style.display = 'block';
+            
+            // Fill student fields
+            document.getElementById('edit-school-name').value = participant.school || '';
+            document.getElementById('edit-student-id').value = participant.studentId || '';
+            
+            // Set purpose
+            if (participant.purpose) {
+                const purposeRadio = document.querySelector(`input[name="edit-purpose"][value="${participant.purpose}"]`);
+                if (purposeRadio) purposeRadio.checked = true;
+            }
+            
+            // Set level
+            if (participant.level) {
+                const levelRadio = document.querySelector(`input[name="edit-level"][value="${participant.level}"]`);
+                if (levelRadio) levelRadio.checked = true;
+                
+                // Show grade selection
+                showEditGradeSelection();
+                
+                // Set grade
+                if (participant.grade) {
+                    const gradeRadio = document.querySelector(`input[name="edit-grade"][value="${participant.grade}"]`);
+                    if (gradeRadio) gradeRadio.checked = true;
+                }
+            }
+            
+            // Set subject
+            if (participant.subject) {
+                document.getElementById('edit-subject').value = participant.subject;
+            }
+            
+            // Set score
+            document.getElementById('edit-score').value = participant.score;
+            
+            // Set certificate code
+            document.getElementById('edit-certificate-code').value = participant.certificateCode || '-';
+            
+            // Store index for saving
+            document.getElementById('edit-participant-index').value = index;
+            
+            // Show the modal
+            document.getElementById('edit-participant-modal').style.display = 'flex';
+        }
+        
+        function toggleEditParticipantFields() {
+            // Only student status is available now
+            document.getElementById('edit-student-fields').style.display = 'block';
+        }
+        
+        function showEditGradeSelection() {
+            const level = document.querySelector('input[name="edit-level"]:checked')?.value;
+            const gradeOptions = document.getElementById('edit-grade-options');
+            
+            // Clear previous options
+            gradeOptions.innerHTML = '';
+            
+            if (!level) return;
+            
+            // Add options based on level
+            if (level === 'SD') {
+                addEditGradeOption('edit-grade-4', 'Kelas <span class="roman">IV</span>', '4');
+                addEditGradeOption('edit-grade-5', 'Kelas <span class="roman">V</span>', '5');
+                addEditGradeOption('edit-grade-6', 'Kelas <span class="roman">VI</span>', '6');
+            } else if (level === 'SMP') {
+                addEditGradeOption('edit-grade-7', 'Kelas <span class="roman">VII</span>', '7');
+                addEditGradeOption('edit-grade-8', 'Kelas <span class="roman">VIII</span>', '8');
+                addEditGradeOption('edit-grade-9', 'Kelas <span class="roman">IX</span>', '9');
+            } else if (level === 'SMA/SMK') {
+                addEditGradeOption('edit-grade-10', 'Kelas <span class="roman">X</span>', '10');
+                addEditGradeOption('edit-grade-11', 'Kelas <span class="roman">XI</span>', '11');
+                addEditGradeOption('edit-grade-12', 'Kelas <span class="roman">XII</span>', '12');
+            }
+        }
+        
+        function addEditGradeOption(id, label, value) {
+            const container = document.getElementById('edit-grade-options');
+            
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.id = id;
+            radio.name = 'edit-grade';
+            radio.value = value;
+            radio.className = 'radio-option';
+            
+            const radioLabel = document.createElement('label');
+            radioLabel.htmlFor = id;
+            radioLabel.className = 'radio-label';
+            radioLabel.innerHTML = label;
+            
+            container.appendChild(radio);
+            container.appendChild(radioLabel);
+        }
+        
+        function saveEditedParticipant() {
+            const index = document.getElementById('edit-participant-index').value;
+            if (!index) return;
+            
+            const participant = participantsData[index];
+            
+            // Update participant data
+            participant.fullname = document.getElementById('edit-fullname').value.trim();
+            participant.status = 'pelajar';
+            participant.school = document.getElementById('edit-school-name').value.trim();
+            participant.studentId = document.getElementById('edit-student-id').value.trim();
+            participant.purpose = document.querySelector('input[name="edit-purpose"]:checked')?.value || '';
+            participant.level = document.querySelector('input[name="edit-level"]:checked')?.value || '';
+            participant.grade = document.querySelector('input[name="edit-grade"]:checked')?.value || '';
+            participant.subject = document.getElementById('edit-subject').value;
+            participant.score = parseInt(document.getElementById('edit-score').value);
+            
+            // Save to localStorage
+            saveParticipantsData();
+            
+            // Reload participants data
+            loadParticipantsData();
+            
+            // Hide modal
+            hideEditParticipantModal();
+            
+            alert('Perubahan data peserta berhasil disimpan!');
+        }
+        
+        function hideEditParticipantModal() {
+            document.getElementById('edit-participant-modal').style.display = 'none';
+        }
+        
+        function deleteSelectedParticipants() {
+            if (selectedParticipants.length === 0) return;
+            
+            if (!confirm(`Apakah Anda yakin ingin menghapus ${selectedParticipants.length} peserta terpilih?`)) {
+                return;
+            }
+            
+            // Sort in descending order to avoid index issues when deleting
+            const sortedIndices = [...selectedParticipants].sort((a, b) => b - a);
+            
+            // Delete participants
+            sortedIndices.forEach(index => {
+                participantsData.splice(index, 1);
+            });
+            
+            // Save to localStorage
+            saveParticipantsData();
+            
+            // Reload participants data
+            loadParticipantsData();
+            
+            alert(`${sortedIndices.length} peserta berhasil dihapus!`);
+        }
+        
+        function searchParticipants() {
+            const searchTerm = document.getElementById('participant-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#participants-table-body tr');
+            
+            rows.forEach(row => {
+                const index = parseInt(row.dataset.index);
+                const participant = participantsData[index];
+                const rowText = `
+                    ${participant.fullname.toLowerCase()} 
+                    ${participant.studentId || ''} 
+                    ${participant.certificateCode || ''}
+                `;
+                
+                if (rowText.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function validateCertificate() {
+            const code = document.getElementById('certificate-code-input').value.trim();
+            const validationResult = document.getElementById('validation-result');
+            
+            if (!code) {
+                alert('Silakan masukkan kode sertifikat');
+                return;
+            }
+            
+            // Find participant with this certificate code
+            const participant = participantsData.find(p => p.certificateCode === code);
+            
+            if (participant) {
+                validationResult.innerHTML = `
+                    <p class="valid-certificate">Sertifikat Valid!</p>
+                    <p>Nama: ${participant.fullname}</p>
+                    <p>Status: Pelajar</p>
+                    <p>Tingkat: ${participant.level || '-'}</p>
+                    <p>Kelas: ${participant.grade ? `Kelas ${participant.grade}` : '-'}</p>
+                    <p>Mata Ujian: ${participant.subject || '-'}</p>
+                    <p>Nilai: ${participant.score}%</p>
+                    <p>Tanggal Ujian: ${new Date(participant.examDate).toLocaleDateString('id-ID')}</p>
+                `;
+                validationResult.style.display = 'block';
+            } else {
+                validationResult.innerHTML = '<p class="invalid-certificate">Sertifikat Tidak Valid!</p>';
+                validationResult.style.display = 'block';
+            }
+        }
+        
+        function saveCodes() {
+            const newLoginCode = document.getElementById('new-login-code').value;
+            const newAdminCode = document.getElementById('new-admin-code').value;
+            
+            if (newLoginCode) {
+                adminSettings.loginCode = newLoginCode;
+                document.getElementById('new-login-code').value = '';
+            }
+            
+            if (newAdminCode) {
+                adminSettings.adminCode = newAdminCode;
+                document.getElementById('new-admin-code').value = '';
+            }
+            
+            // Save to localStorage
+            saveAdminSettings();
+            
+            alert('Kode berhasil diubah!');
+        }
+        
+        function saveContent() {
+            const greetingMessage = document.getElementById('greeting-message-input').value;
+            const adminMessage = document.getElementById('admin-message-input').value;
+            const chairmanName = document.getElementById('chairman-name').value;
+            
+            // Update admin settings
+            adminSettings.greetingMessage = greetingMessage;
+            adminSettings.adminMessage = adminMessage;
+            adminSettings.chairmanName = chairmanName;
+            
+            // Update UI
+            document.getElementById('greeting-text').textContent = greetingMessage;
+            document.getElementById('admin-message').textContent = adminMessage;
+            
+            // Save to localStorage
+            saveAdminSettings();
+            
+            alert('Perubahan konten berhasil disimpan!');
+        }
+        
+        function saveSettings() {
+            const examDuration = parseInt(document.getElementById('exam-duration').value);
+            const questionCount = parseInt(document.getElementById('question-count').value);
+            const randomizeQuestions = document.getElementById('randomize-questions').checked;
+            
+            // Update admin settings
+            adminSettings.examDuration = examDuration;
+            adminSettings.questionCount = questionCount;
+            adminSettings.randomizeQuestions = randomizeQuestions;
+            
+            // Update subject toggle
+            adminSettings.enabledSubjects = {
+                Sejarah: document.getElementById('toggle-history').checked
+            };
+            
+            // Save to localStorage
+            saveAdminSettings();
+            
+            alert('Pengaturan berhasil disimpan!');
+        }
+    </script>
+</body>
+</html>
