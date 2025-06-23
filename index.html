@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --color-primary: #8B4513; /* Warna coklat tua untuk tema sejarah */
-            --color-secondary: #A0522D;
-            --color-tertiary: #CD853F;
+            --color-primary: #6a11cb;
+            --color-secondary: #2575fc;
+            --color-tertiary: #00c6fb;
             --color-success: #4CAF50;
             --color-error: #f44336;
             --color-warning: #ff9800;
@@ -106,14 +106,14 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(160, 82, 45, 0.3);
+            box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
             margin: 5px;
             text-align: center;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(160, 82, 45, 0.4);
+            box-shadow: 0 8px 20px rgba(37, 117, 252, 0.4);
         }
 
         .btn:active {
@@ -139,6 +139,7 @@
         /* Form Styles */
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
 
         .form-control {
@@ -156,7 +157,7 @@
             outline: none;
             border-color: var(--color-secondary);
             background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
         }
 
         .form-label {
@@ -188,7 +189,25 @@
         .radio-option:checked + .radio-label,
         .checkbox-option:checked + .checkbox-label {
             background: linear-gradient(to right, var(--color-secondary), var(--color-tertiary));
-            box-shadow: 0 4px 15px rgba(160, 82, 45, 0.3);
+            box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
+        }
+
+        /* Custom Checkbox for Terms */
+        .terms-checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .terms-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            accent-color: var(--color-secondary);
+        }
+        
+        .terms-text {
+            font-size: 14px;
         }
 
         /* Animation Classes */
@@ -916,19 +935,61 @@
         .alert-success {
             background-color: #dff0d8;
             color: #3c763d;
-            border: 1px solid #d6e9c6;
+            border: 1px solid #d6e9c6);
         }
 
         .alert-danger {
             background-color: #f2dede;
             color: #a94442;
-            border: 1px solid #ebccd1;
+            border: 1px solid #ebccd1);
+        }
+
+        /* Error message styles */
+        .error-message {
+            color: var(--color-error);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Warning notification */
+        .warning-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-warning);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        /* Input error state */
+        .input-error {
+            border-color: var(--color-error) !important;
+            background: rgba(244, 67, 54, 0.1) !important;
+        }
+
+        /* Radio group error */
+        .radio-group-error {
+            outline: 2px solid var(--color-error);
+            border-radius: 8px;
+            padding: 5px;
         }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
     <div id="celebration-particles"></div>
+    
+    <!-- Warning notification for incomplete form -->
+    <div class="warning-notification" id="form-warning">
+        <i class="fas fa-exclamation-circle"></i> Harap lengkapi semua data peserta dengan benar sebelum melanjutkan!
+    </div>
     
     <div class="container">
         <!-- Welcome Screen -->
@@ -939,7 +1000,7 @@
             </div>
             
             <div id="greeting-message">
-                <p id="greeting-text">Selamat datang di sistem ujian online Sejarah PERGUNU Situbondo, Sistem tes kemampuan akademik untuk pelajar. Silakan masukkan kode login untuk melanjutkan.</p>
+                <p id="greeting-text">Selamat datang di sistem ujian online Sejarah PERGUNU Situbondo. Silakan masukkan kode login untuk melanjutkan.</p>
             </div>
             
             <div class="form-group">
@@ -966,9 +1027,9 @@
                 <p>9. Keputusan panitia ujian bersifat mutlak dan tidak dapat diganggu gugat.</p>
             </div>
             
-            <div class="form-group">
-                <input type="checkbox" id="agree-terms" class="checkbox-option">
-                <label for="agree-terms" class="checkbox-label">Saya menyetujui</label>
+            <div class="terms-checkbox-container">
+                <input type="checkbox" id="agree-terms" class="terms-checkbox" required>
+                <span class="terms-text">Saya telah membaca dan menyetujui peraturan di atas</span>
             </div>
             
             <button id="continue-btn" class="btn" disabled>Lanjut Ikut Ujian</button>
@@ -982,6 +1043,7 @@
             <div class="form-group">
                 <label for="fullname" class="form-label">Nama Lengkap</label>
                 <input type="text" id="fullname" class="form-control" placeholder="Masukkan nama lengkap" pattern="[A-Za-z ]+" title="Hanya huruf diperbolehkan" required>
+                <div class="error-message" id="fullname-error">Nama lengkap harus diisi dan hanya boleh mengandung huruf</div>
             </div>
             
             <div class="form-group">
@@ -996,17 +1058,19 @@
             <div id="student-fields">
                 <div class="form-group">
                     <label for="school-name" class="form-label">Nama Sekolah</label>
-                    <input type="text" id="school-name" class="form-control" placeholder="Masukkan nama sekolah">
+                    <input type="text" id="school-name" class="form-control" placeholder="Masukkan nama sekolah" required>
+                    <div class="error-message" id="school-error">Nama sekolah harus diisi</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="student-id" class="form-label">NIS (Nomor Induk Siswa)</label>
                     <input type="text" id="student-id" class="form-control" placeholder="Masukkan NIS" pattern="[0-9]+" title="Hanya angka diperbolehkan" required>
+                    <div class="error-message" id="nis-error">NIS harus diisi dan hanya boleh mengandung angka</div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Tujuan Ikut Ujian</label>
-                    <div class="radio-group">
+                    <div class="radio-group" id="purpose-radio-group">
                         <input type="radio" id="purpose-task" name="purpose" value="Tugas Sekolah" class="radio-option">
                         <label for="purpose-task" class="radio-label">Tugas Sekolah</label>
                         
@@ -1016,11 +1080,12 @@
                         <input type="radio" id="purpose-test" name="purpose" value="Tes dan Belajar" class="radio-option">
                         <label for="purpose-test" class="radio-label">Tes dan Belajar</label>
                     </div>
+                    <div class="error-message" id="purpose-error">Silakan pilih tujuan ikut ujian</div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Tingkat Sekolah</label>
-                    <div class="radio-group">
+                    <div class="radio-group" id="level-radio-group">
                         <input type="radio" id="level-elementary" name="level" value="SD" class="radio-option">
                         <label for="level-elementary" class="radio-label">SD</label>
                         
@@ -1030,6 +1095,7 @@
                         <input type="radio" id="level-senior" name="level" value="SMA/SMK" class="radio-option">
                         <label for="level-senior" class="radio-label">SMA/SMK</label>
                     </div>
+                    <div class="error-message" id="level-error">Silakan pilih tingkat sekolah</div>
                 </div>
             </div>
             
@@ -1040,6 +1106,7 @@
                     <div class="radio-group" id="grade-options">
                         <!-- Options will be populated by JavaScript -->
                     </div>
+                    <div class="error-message" id="grade-error">Silakan pilih kelas</div>
                 </div>
             </div>
             
@@ -1047,10 +1114,11 @@
             <div id="subject-selection" style="display: none;">
                 <div class="form-group">
                     <label class="form-label">Pilih Jenis Ujian</label>
-                    <div class="radio-group">
+                    <div class="radio-group" id="subject-radio-group">
                         <input type="radio" id="subject-history" name="subject" value="Sejarah" class="radio-option" checked>
                         <label for="subject-history" class="radio-label">Sejarah</label>
                     </div>
+                    <div class="error-message" id="subject-error">Silakan pilih jenis ujian</div>
                 </div>
             </div>
             
@@ -1167,30 +1235,6 @@
                                 <label class="admin-control-label">Durasi Ujian (menit)</label>
                                 <input type="number" id="exam-duration" class="admin-control-input" value="120" min="5" max="300">
                             </div>
-                            <div class="admin-control-group">
-                                <label class="admin-control-label">Jumlah Soal</label>
-                                <select id="question-count" class="admin-control-input">
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="15">15</option>
-                                    <option value="20">20</option>
-                                    <option value="25">25</option>
-                                    <option value="30">30</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                    <option value="150">150</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="admin-control-group">
-                            <label class="admin-control-label">Acak Soal</label>
-                            <div class="admin-toggle">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="randomize-questions" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <span id="randomize-status">Aktif</span>
-                            </div>
                         </div>
                     </div>
                     
@@ -1250,6 +1294,17 @@
                                     <!-- Participant data will be loaded here -->
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="export-buttons">
+                            <button id="export-csv-btn" class="btn btn-info">
+                                <i class="fas fa-file-csv"></i> Export to CSV
+                            </button>
+                            <button id="export-json-btn" class="btn btn-info">
+                                <i class="fas fa-file-code"></i> Export to JSON
+                            </button>
+                            <button id="export-excel-btn" class="btn btn-success">
+                                <i class="fas fa-file-excel"></i> Export to Excel
+                            </button>
                         </div>
                     </div>
                     
@@ -1388,6 +1443,7 @@
     <audio id="opening-sound" src="https://github.com/pergunu/ujian-online/raw/main/assets/audio/opening.mp3" preload="auto"></audio>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         // Global variables
         let currentScreen = 'welcome';
@@ -1399,7 +1455,11 @@
         let examTimer;
         let examTimeLeft = 120 * 60; // 120 minutes in seconds
         let selectedParticipants = [];
-        
+        let questionOrder = []; // Untuk menyimpan urutan soal yang diacak
+
+        // URL Google Apps Script untuk penyimpanan data
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzuh1M0pS64v5e_HYGafcG7CD8RwCEf4FVroKnOT1DujxTdCnn6zTBeQvSwgmenspgN/exec';
+
         // Audio elements
         const buttonSound = document.getElementById('button-sound');
         const correctAnswerSound = document.getElementById('correct-answer-sound');
@@ -1411,1789 +1471,394 @@
         const DEFAULT_LOGIN_CODE = '12345';
         const DEFAULT_ADMIN_PANEL_CODE = '65614222';
         
-        // Store participants data
-        let participantsData = JSON.parse(localStorage.getItem('participantsData')) || [];
+        // Store participants data in localStorage
+        let participantsData = JSON.parse(localStorage.getItem('pergunuParticipantsData')) || [];
         
-        // Store admin settings
-        let adminSettings = JSON.parse(localStorage.getItem('adminSettings')) || {
+        // Store admin settings in localStorage
+        let adminSettings = JSON.parse(localStorage.getItem('pergunuAdminSettings')) || {
             loginCode: DEFAULT_LOGIN_CODE,
             adminCode: DEFAULT_ADMIN_PANEL_CODE,
             examDuration: 120,
-            questionCount: 20,
-            randomizeQuestions: true,
             greetingMessage: "Selamat datang di sistem ujian online Sejarah PERGUNU Situbondo. Silakan masukkan kode login untuk melanjutkan.",
             adminMessage: "Tidak ada informasi terbaru saat ini.",
             chairmanName: "Moh. Nuril Hudha, S.Pd., M.Si.",
             enabledSubjects: {
-                Sejarah: true
+                "Sejarah": true
             }
         };
 
-        // Question bank structure with levels (Sejarah only)
+        // Expanded Question bank with more questions (Sejarah only)
         let QUESTION_BANK = {
             'SD': {
                 'Sejarah': [
                     {
-                question: "Siapakah proklamator kemerdekaan Indonesia?",
-                options: [
-                    "A. Soekarno dan Mohammad Hatta",
-                    "B. Soeharto dan BJ Habibie",
-                    "C. Gatot Subroto dan Sudirman",
-                    "D. Ki Hajar Dewantara dan Dewi Sartika",
-                    "E. RA Kartini dan Cut Nyak Dien"
-                ],
-                correctAnswer: 0,
-                explanation: "Proklamator kemerdekaan Indonesia adalah Soekarno dan Mohammad Hatta yang membacakan teks proklamasi pada 17 Agustus 1945. Jawaban benar adalah A."
-            },
-            {
-                question: "Pada tanggal berapa Indonesia merdeka?",
-                options: [
-                    "A. 1 Juni 1945",
-                    "B. 17 Agustus 1945",
-                    "C. 28 Oktober 1928",
-                    "D. 10 November 1945",
-                    "E. 27 Desember 1949"
-                ],
-                correctAnswer: 1,
-                explanation: "Indonesia merdeka pada tanggal 17 Agustus 1945. Jawaban benar adalah B."
-            },
-            {
-                question: "Dokumen apa yang dibacakan saat proklamasi kemerdekaan?",
-                options: [
-                    "A. Pancasila",
-                    "B. UUD 1945",
-                    "C. Teks Proklamasi",
-                    "D. Sumpah Pemuda",
-                    "E. Piagam Jakarta"
-                ],
-                correctAnswer: 2,
-                explanation: "Dokumen yang dibacakan saat proklamasi adalah Teks Proklamasi. Jawaban benar adalah C."
-            },
-            {
-                question: "Siapakah penjahit bendera Merah Putih yang dikibarkan saat proklamasi?",
-                options: [
-                    "A. RA Kartini",
-                    "B. Fatmawati",
-                    "C. Cut Nyak Dien",
-                    "D. Dewi Sartika",
-                    "E. Martha Christina Tiahahu"
-                ],
-                correctAnswer: 1,
-                explanation: "Fatmawati adalah penjahit bendera Merah Putih yang dikibarkan saat proklamasi. Jawaban benar adalah B."
-            },
-            {
-                question: "Peristiwa apa yang terjadi pada 10 November 1945 di Surabaya?",
-                options: [
-                    "A. Proklamasi Kemerdekaan",
-                    "B. Pertempuran Ambarawa",
-                    "C. Pertempuran Surabaya",
-                    "D. Konferensi Meja Bundar",
-                    "E. Sumpah Pemuda"
-                ],
-                correctAnswer: 2,
-                explanation: "Pada 10 November 1945 terjadi Pertempuran Surabaya melawan tentara Sekutu. Jawaban benar adalah C."
-            },
-            {
-                question: "Apa nama organisasi pemuda yang pertama kali dibentuk di Indonesia?",
-                options: [
-                    "A. Budi Utomo",
-                    "B. Sarekat Islam",
-                    "C. Indische Partij",
-                    "D. Jong Java",
-                    "E. Perhimpunan Indonesia"
-                ],
-                correctAnswer: 0,
-                explanation: "Budi Utomo adalah organisasi pemuda pertama yang dibentuk pada 20 Mei 1908. Jawaban benar adalah A."
-            },
-            {
-                question: "Pada tahun berapa Sumpah Pemuda diikrarkan?",
-                options: [
-                    "A. 1908",
-                    "B. 1928",
-                    "C. 1945",
-                    "D. 1950",
-                    "E. 1965"
-                ],
-                correctAnswer: 1,
-                explanation: "Sumpah Pemuda diikrarkan pada 28 Oktober 1928. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa isi dari Sumpah Pemuda?",
-                options: [
-                    "A. Satu nusa, satu bangsa, satu bahasa",
-                    "B. Satu Indonesia, satu rakyat, satu pemerintahan",
-                    "C. Satu tanah air, satu negara, satu presiden",
-                    "D. Satu bendera, satu lagu, satu bahasa",
-                    "E. Satu tujuan, satu cita-cita, satu perjuangan"
-                ],
-                correctAnswer: 0,
-                explanation: "Isi Sumpah Pemuda adalah satu nusa, satu bangsa, satu bahasa. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah pahlawan nasional yang dikenal sebagai Bapak Pendidikan Nasional?",
-                options: [
-                    "A. RA Kartini",
-                    "B. Ki Hajar Dewantara",
-                    "C. Dewi Sartika",
-                    "D. KH Ahmad Dahlan",
-                    "E. Mohammad Hatta"
-                ],
-                correctAnswer: 1,
-                explanation: "Ki Hajar Dewantara dikenal sebagai Bapak Pendidikan Nasional dan pendiri Taman Siswa. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa nama kapal yang digunakan Belanda untuk membawa Soekarno dan Hatta ke pengasingan di Bangka?",
-                options: [
-                    "A. KPM",
-                    "B. De Zeven Provinciën",
-                    "C. Van Imhoff",
-                    "D. KPM Van der Wijck",
-                    "E. KPM Plancius"
-                ],
-                correctAnswer: 3,
-                explanation: "Kapal yang digunakan adalah KPM Van der Wijck. Jawaban benar adalah D."
-            },
-            {
-                question: "Peristiwa Rengasdengklok terjadi karena...",
-                options: [
-                    "A. Perbedaan pendapat tentang waktu proklamasi",
-                    "B. Pertempuran melawan Jepang",
-                    "C. Penculikan Soekarno-Hatta oleh Belanda",
-                    "D. Perselisihan antara golongan tua dan muda",
-                    "E. Upaya mempertahankan kemerdekaan"
-                ],
-                correctAnswer: 3,
-                explanation: "Peristiwa Rengasdengklok terjadi karena perbedaan pendapat antara golongan tua dan muda tentang proklamasi. Jawaban benar adalah D."
-            },
-            {
-                question: "Apa nama kerajaan Hindu pertama di Indonesia?",
-                options: [
-                    "A. Majapahit",
-                    "B. Sriwijaya",
-                    "C. Kutai",
-                    "D. Mataram",
-                    "E. Singasari"
-                ],
-                correctAnswer: 2,
-                explanation: "Kerajaan Kutai adalah kerajaan Hindu pertama di Indonesia. Jawaban benar adalah C."
-            },
-            {
-                question: "Siapakah raja Majapahit yang terkenal dengan Sumpah Palapa?",
-                options: [
-                    "A. Hayam Wuruk",
-                    "B. Raden Wijaya",
-                    "C. Gajah Mada",
-                    "D. Kertanegara",
-                    "E. Jayanegara"
-                ],
-                correctAnswer: 2,
-                explanation: "Gajah Mada adalah patih Majapahit yang mengucapkan Sumpah Palapa. Jawaban benar adalah C."
-            },
-            {
-                question: "Apa nama candi Buddha terbesar di dunia yang berada di Indonesia?",
-                options: [
-                    "A. Borobudur",
-                    "B. Prambanan",
-                    "C. Mendut",
-                    "D. Sewu",
-                    "E. Pawon"
-                ],
-                correctAnswer: 0,
-                explanation: "Candi Borobudur adalah candi Buddha terbesar di dunia. Jawaban benar adalah A."
-            },
-            {
-                question: "Kerajaan Islam pertama di Indonesia adalah...",
-                options: [
-                    "A. Demak",
-                    "B. Samudera Pasai",
-                    "C. Mataram Islam",
-                    "D. Banten",
-                    "E. Aceh Darussalam"
-                ],
-                correctAnswer: 1,
-                explanation: "Samudera Pasai adalah kerajaan Islam pertama di Indonesia. Jawaban benar adalah B."
-            },
-            {
-                question: "Siapakah sultan pertama Kerajaan Demak?",
-                options: [
-                    "A. Raden Patah",
-                    "B. Sultan Trenggono",
-                    "C. Sunan Kalijaga",
-                    "D. Fatahillah",
-                    "E. Sunan Gunung Jati"
-                ],
-                correctAnswer: 0,
-                explanation: "Raden Patah adalah sultan pertama Kerajaan Demak. Jawaban benar adalah A."
-            },
-            {
-                question: "Apa nama perjanjian yang mengakhiri Perang Diponegoro?",
-                options: [
-                    "A. Perjanjian Giyanti",
-                    "B. Perjanjian Bongaya",
-                    "C. Perjanjian Linggarjati",
-                    "D. Perjanjian Renville",
-                    "E. Perjanjian Tuntang"
-                ],
-                correctAnswer: 0,
-                explanation: "Perjanjian Giyanti mengakhiri Perang Diponegoro. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah pahlawan nasional dari Maluku yang melawan Belanda?",
-                options: [
-                    "A. Tuanku Imam Bonjol",
-                    "B. Pangeran Diponegoro",
-                    "C. Pattimura",
-                    "D. Sultan Hasanuddin",
-                    "E. Sisingamangaraja"
-                ],
-                correctAnswer: 2,
-                explanation: "Pattimura adalah pahlawan nasional dari Maluku. Jawaban benar adalah C."
-            },
-            {
-                question: "Apa nama perang besar yang dipimpin Pangeran Diponegoro melawan Belanda?",
-                options: [
-                    "A. Perang Padri",
-                    "B. Perang Jawa",
-                    "C. Perang Aceh",
-                    "D. Perang Banjar",
-                    "E. Perang Batak"
-                ],
-                correctAnswer: 1,
-                explanation: "Perang Diponegoro dikenal sebagai Perang Jawa (1825-1830). Jawaban benar adalah B."
-            },
-            {
-                question: "Siapakah pahlawan wanita dari Aceh yang melawan Belanda?",
-                options: [
-                    "A. RA Kartini",
-                    "B. Cut Nyak Dien",
-                    "C. Dewi Sartika",
-                    "D. Martha Christina Tiahahu",
-                    "E. Nyi Ageng Serang"
-                ],
-                correctAnswer: 1,
-                explanation: "Cut Nyak Dien adalah pahlawan wanita dari Aceh. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa nama organisasi wanita pertama di Indonesia?",
-                options: [
-                    "A. Putri Mardika",
-                    "B. Wanita Utama",
-                    "C. Aisyiyah",
-                    "D. Kowani",
-                    "E. Dharma Wanita"
-                ],
-                correctAnswer: 0,
-                explanation: "Putri Mardika adalah organisasi wanita pertama di Indonesia. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah yang menulis buku 'Habis Gelap Terbitlah Terang'?",
-                options: [
-                    "A. Dewi Sartika",
-                    "B. RA Kartini",
-                    "C. Cut Nyak Dien",
-                    "D. Nyi Ageng Serang",
-                    "E. Martha Christina Tiahahu"
-                ],
-                correctAnswer: 1,
-                explanation: "RA Kartini menulis surat-surat yang kemudian dibukukan sebagai 'Habis Gelap Terbitlah Terang'. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa nama sekolah yang didirikan oleh Dewi Sartika?",
-                options: [
-                    "A. Taman Siswa",
-                    "B. Sekolah Kartini",
-                    "C. Sekolah Keutamaan Istri",
-                    "D. Sekolah Wanita",
-                    "E. Sekolah Raden Ajeng"
-                ],
-                correctAnswer: 2,
-                explanation: "Dewi Sartika mendirikan Sekolah Keutamaan Istri di Bandung. Jawaban benar adalah C."
-            },
-            {
-                question: "Pada tahun berapa Belanda pertama kali datang ke Indonesia?",
-                options: [
-                    "A. 1498",
-                    "B. 1511",
-                    "C. 1596",
-                    "D. 1602",
-                    "E. 1619"
-                ],
-                correctAnswer: 2,
-                explanation: "Belanda pertama kali datang ke Indonesia pada tahun 1596 dipimpin Cornelis de Houtman. Jawaban benar adalah C."
-            },
-            {
-                question: "Apa nama perusahaan dagang Belanda yang memonopoli perdagangan di Indonesia?",
-                options: [
-                    "A. VOC",
-                    "B. EIC",
-                    "C. KPM",
-                    "D. NHM",
-                    "E. BPM"
-                ],
-                correctAnswer: 0,
-                explanation: "VOC (Vereenigde Oost-Indische Compagnie) adalah perusahaan dagang Belanda. Jawaban benar adalah A."
-            },
-            {
-                question: "Kapan VOC dibubarkan?",
-                options: [
-                    "A. 1799",
-                    "B. 1800",
-                    "C. 1811",
-                    "D. 1820",
-                    "E. 1830"
-                ],
-                correctAnswer: 0,
-                explanation: "VOC dibubarkan pada tahun 1799 karena bangkrut. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah gubernur jenderal Belanda yang menerapkan sistem tanam paksa?",
-                options: [
-                    "A. Daendels",
-                    "B. Raffles",
-                    "C. Van den Bosch",
-                    "D. Van Heutsz",
-                    "E. De Kock"
-                ],
-                correctAnswer: 2,
-                explanation: "Van den Bosch menerapkan sistem tanam paksa (cultuurstelsel) tahun 1830. Jawaban benar adalah C."
-            },
-            {
-                question: "Apa nama sistem kerja paksa yang diterapkan Daendels?",
-                options: [
-                    "A. Rodi",
-                    "B. Tanam Paksa",
-                    "C. Kerja Wajib",
-                    "D. Romusha",
-                    "E. Heerendiensten"
-                ],
-                correctAnswer: 0,
-                explanation: "Daendels menerapkan kerja rodi untuk membangun jalan Anyer-Panarukan. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah penulis yang mengkritik tanam paksa melalui buku 'Max Havelaar'?",
-                options: [
-                    "A. Van den Bosch",
-                    "B. Multatuli",
-                    "C. Douwes Dekker",
-                    "D. Van Deventer",
-                    "E. Snouck Hurgronje"
-                ],
-                correctAnswer: 1,
-                explanation: "Multatuli (nama pena Eduard Douwes Dekker) menulis 'Max Havelaar'. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa nama politik etis yang diperjuangkan Van Deventer?",
-                options: [
-                    "A. Trias Politica",
-                    "B. Trilogi Van Deventer",
-                    "C. Tri Dharma",
-                    "D. Tri Karya",
-                    "E. Tri Program"
-                ],
-                correctAnswer: 1,
-                explanation: "Trilogi Van Deventer meliputi irigasi, edukasi, dan transmigrasi. Jawaban benar adalah B."
-            },
-            {
-                question: "Organisasi pergerakan nasional pertama adalah...",
-                options: [
-                    "A. Budi Utomo",
-                    "B. Sarekat Islam",
-                    "C. Indische Partij",
-                    "D. Perhimpunan Indonesia",
-                    "E. PNI"
-                ],
-                correctAnswer: 0,
-                explanation: "Budi Utomo (1908) adalah organisasi pergerakan nasional pertama. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah pendiri Indische Partij?",
-                options: [
-                    "A. Soekarno",
-                    "B. Douwes Dekker, Tjipto Mangunkusumo, Ki Hajar Dewantara",
-                    "C. HOS Tjokroaminoto",
-                    "D. Ahmad Dahlan",
-                    "E. Sutomo"
-                ],
-                correctAnswer: 1,
-                explanation: "Indische Partij didirikan oleh Tiga Serangkai: Douwes Dekker, Tjipto Mangunkusumo, Ki Hajar Dewantara. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa semboyan yang terkenal dari Ki Hajar Dewantara?",
-                options: [
-                    "A. Tut Wuri Handayani",
-                    "B. Ing Ngarsa Sung Tuladha",
-                    "C. Ing Madya Mangun Karsa",
-                    "D. Semua benar",
-                    "E. A dan B benar"
-                ],
-                correctAnswer: 3,
-                explanation: "Semboyan Ki Hajar Dewantara adalah Tut Wuri Handayani, Ing Ngarsa Sung Tuladha, Ing Madya Mangun Karsa. Jawaban benar adalah D."
-            },
-            {
-                question: "Peristiwa apa yang terjadi pada 10 November 1945?",
-                options: [
-                    "A. Proklamasi Kemerdekaan",
-                    "B. Pertempuran Ambarawa",
-                    "C. Pertempuran Surabaya",
-                    "D. Bandung Lautan Api",
-                    "E. Serangan Umum 1 Maret"
-                ],
-                correctAnswer: 2,
-                explanation: "10 November 1945 adalah Pertempuran Surabaya melawan Sekutu. Jawaban benar adalah C."
-            },
-            {
-                question: "Apa nama perjanjian yang mengakui kedaulatan Indonesia oleh Belanda?",
-                options: [
-                    "A. Perjanjian Renville",
-                    "B. Perjanjian Linggarjati",
-                    "C. Konferensi Meja Bundar",
-                    "D. Perjanjian Roem-Royen",
-                    "E. Perjanjian Tuntang"
-                ],
-                correctAnswer: 2,
-                explanation: "Konferensi Meja Bundar (1949) menghasilkan pengakuan kedaulatan. Jawaban benar adalah C."
-            },
-            {
-                question: "Siapakah perdana menteri pertama Indonesia?",
-                options: [
-                    "A. Sutan Syahrir",
-                    "B. Mohammad Hatta",
-                    "C. Amir Syarifuddin",
-                    "D. Soekarno",
-                    "E. Ali Sastroamidjojo"
-                ],
-                correctAnswer: 0,
-                explanation: "Sutan Syahrir adalah perdana menteri pertama (1945-1947). Jawaban benar adalah A."
-            },
-            {
-                question: "Apa nama operasi militer Belanda yang pertama setelah kemerdekaan?",
-                options: [
-                    "A. Operatie Product",
-                    "B. Operatie Kraai",
-                    "C. Agresi Militer I",
-                    "D. Politionele Acties",
-                    "E. A dan C benar"
-                ],
-                correctAnswer: 4,
-                explanation: "Agresi Militer I (1947) disebut Belanda sebagai Operatie Product. Jawaban benar adalah E."
-            },
-            {
-                question: "Kapan Indonesia menjadi anggota PBB pertama kali?",
-                options: [
-                    "A. 1945",
-                    "B. 1949",
-                    "C. 1950",
-                    "D. 1955",
-                    "E. 1960"
-                ],
-                correctAnswer: 2,
-                explanation: "Indonesia menjadi anggota PBB ke-60 pada 28 September 1950. Jawaban benar adalah C."
-            },
-            {
-                question: "Di mana konferensi Asia-Afrika dilaksanakan?",
-                options: [
-                    "A. Jakarta",
-                    "B. Bandung",
-                    "C. Bogor",
-                    "D. Yogyakarta",
-                    "E. Surabaya"
-                ],
-                correctAnswer: 1,
-                explanation: "Konferensi Asia-Afrika 1955 dilaksanakan di Bandung. Jawaban benar adalah B."
-            },
-            {
-                question: "Siapakah tokoh yang dikenal sebagai Bapak Koperasi Indonesia?",
-                options: [
-                    "A. Soekarno",
-                    "B. Mohammad Hatta",
-                    "C. Sutan Syahrir",
-                    "D. Ki Hajar Dewantara",
-                    "E. Ahmad Dahlan"
-                ],
-                correctAnswer: 1,
-                explanation: "Mohammad Hatta dikenal sebagai Bapak Koperasi Indonesia. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa nama pesawat pertama yang dimiliki Indonesia setelah merdeka?",
-                options: [
-                    "A. Seulawah",
-                    "B. Gatotkaca",
-                    "C. Nusantara",
-                    "D. Garuda",
-                    "E. Angkasa"
-                ],
-                correctAnswer: 0,
-                explanation: "Pesawat pertama adalah Seulawah, sumbangan rakyat Aceh. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah pahlawan nasional yang dikenal sebagai Jenderal Besar?",
-                options: [
-                    "A. Sudirman",
-                    "B. Gatot Subroto",
-                    "C. Ahmad Yani",
-                    "D. Soedirman",
-                    "E. A.H. Nasution"
-                ],
-                correctAnswer: 3,
-                explanation: "Jenderal Soedirman adalah panglima besar pertama dan bergelar Jenderal Besar. Jawaban benar adalah D."
-            },
-            {
-                question: "Apa nama satelit pertama Indonesia?",
-                options: [
-                    "A. Palapa A1",
-                    "B. Telkom 1",
-                    "C. Lapan A1",
-                    "D. Garuda 1",
-                    "E. Indosat 1"
-                ],
-                correctAnswer: 0,
-                explanation: "Satelit pertama Indonesia adalah Palapa A1 diluncurkan 1976. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah presiden Indonesia yang pertama kali dipilih secara langsung?",
-                options: [
-                    "A. Soekarno",
-                    "B. Soeharto",
-                    "C. BJ Habibie",
-                    "D. Abdurrahman Wahid",
-                    "E. Megawati Soekarnoputri"
-                ],
-                correctAnswer: 3,
-                explanation: "Pemilihan presiden langsung pertama kali tahun 2004, tetapi pilihan ini salah karena sebenarnya Susilo Bambang Yudhoyono adalah presiden pertama yang dipilih langsung. Mungkin perlu koreksi opsi."
-            },
-            {
-                question: "Apa nama museum yang menyimpan sejarah perjuangan kemerdekaan di Jakarta?",
-                options: [
-                    "A. Museum Fatahillah",
-                    "B. Museum Nasional",
-                    "C. Museum Perumusan Naskah Proklamasi",
-                    "D. Museum Joang 45",
-                    "E. Museum Sumpah Pemuda"
-                ],
-                correctAnswer: 3,
-                explanation: "Museum Joang 45 menyimpan sejarah perjuangan kemerdekaan. Jawaban benar adalah D."
-            },
-            {
-                question: "Siapakah tokoh yang merancang lambang negara Garuda Pancasila?",
-                options: [
-                    "A. Soekarno",
-                    "B. Sultan Hamid II",
-                    "C. Mohammad Yamin",
-                    "D. Ki Hajar Dewantara",
-                    "E. Basuki Resobowo"
-                ],
-                correctAnswer: 1,
-                explanation: "Sultan Hamid II merancang lambang Garuda Pancasila. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa nama lagu kebangsaan Indonesia?",
-                options: [
-                    "A. Indonesia Raya",
-                    "B. Garuda Pancasila",
-                    "C. Bagimu Negeri",
-                    "D. Berkibarlah Benderaku",
-                    "E. Syukur"
-                ],
-                correctAnswer: 0,
-                explanation: "Lagu kebangsaan Indonesia adalah Indonesia Raya karya WR Supratman. Jawaban benar adalah A."
-            },
-            {
-                question: "Siapakah pencipta lagu Indonesia Raya?",
-                options: [
-                    "A. WR Supratman",
-                    "B. Ismail Marzuki",
-                    "C. C. Simanjuntak",
-                    "D. Kusbini",
-                    "E. L. Manik"
-                ],
-                correctAnswer: 0,
-                explanation: "WR Supratman adalah pencipta lagu Indonesia Raya. Jawaban benar adalah A."
-            },
-            {
-                question: "Apa nama surat kabar tempat teks proklamasi pertama kali dimuat?",
-                options: [
-                    "A. Soeara Asia",
-                    "B. Soeara Merdeka",
-                    "C. Berita Indonesia",
-                    "D. Harian Rakjat",
-                    "E. Soeloeh Merdeka"
-                ],
-                correctAnswer: 1,
-                explanation: "Teks proklamasi pertama kali dimuat di Soeara Merdeka. Jawaban benar adalah B."
-            },
-            {
-                question: "Di mana naskah proklamasi asli disimpan?",
-                options: [
-                    "A. Istana Negara",
-                    "B. Arsip Nasional",
-                    "C. Museum Perumusan Naskah Proklamasi",
-                    "D. Rumah Soekarno",
-                    "E. Tidak diketahui"
-                ],
-                correctAnswer: 1,
-                explanation: "Naskah asli disimpan di Arsip Nasional. Jawaban benar adalah B."
-            },
-            {
-                question: "Apa nama kapal yang membawa Soekarno-Hatta kembali ke Jakarta setelah proklamasi?",
-                options: [
-                    "A. KPM Van der Wijck",
-                    "B. KPM Plancius",
-                    "C. KPM Van Imhoff",
-                    "D. KPM De Klerk",
-                    "E. KPM Van Heutsz"
-                ],
-                correctAnswer: 1,
-                explanation: "Kapal KPM Plancius membawa mereka kembali ke Jakarta. Jawaban benar adalah B."
-            }
+                        question: "Siapakah proklamator kemerdekaan Indonesia?",
+                        options: [
+                            "A. Soekarno dan Mohammad Hatta",
+                            "B. Soeharto dan B.J. Habibie",
+                            "C. Jenderal Sudirman dan Gatot Subroto",
+                            "D. Ki Hajar Dewantara dan Dewi Sartika",
+                            "E. Tan Malaka dan Sutan Sjahrir"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Proklamator kemerdekaan Indonesia adalah Soekarno dan Mohammad Hatta. Mereka membacakan teks proklamasi pada tanggal 17 Agustus 1945 yang menandai kemerdekaan Indonesia dari penjajahan."
+                    },
+                    {
+                        question: "Pada tanggal berapa Indonesia merdeka?",
+                        options: [
+                            "A. 17 Agustus 1945",
+                            "B. 27 Desember 1949",
+                            "C. 1 Juni 1945",
+                            "D. 28 Oktober 1928",
+                            "E. 10 November 1945"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Indonesia merdeka pada tanggal 17 Agustus 1945. Tanggal ini diperingati sebagai Hari Kemerdekaan Republik Indonesia setiap tahunnya."
+                    },
+                    {
+                        question: "Sumpah Pemuda diikrarkan pada tanggal...",
+                        options: [
+                            "A. 20 Mei 1908",
+                            "B. 28 Oktober 1928",
+                            "C. 17 Agustus 1945",
+                            "D. 10 November 1945",
+                            "E. 1 Juni 1945"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Sumpah Pemuda diikrarkan pada tanggal 28 Oktober 1928. Isi Sumpah Pemuda adalah satu nusa, satu bangsa, dan satu bahasa yaitu Indonesia."
+                    },
+                    {
+                        question: "Organisasi pergerakan nasional pertama di Indonesia adalah...",
+                        options: [
+                            "A. Budi Utomo",
+                            "B. Sarekat Islam",
+                            "C. Indische Partij",
+                            "D. Perhimpunan Indonesia",
+                            "E. Partai Nasional Indonesia"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Budi Utomo didirikan pada 20 Mei 1908 dan dianggap sebagai organisasi pergerakan nasional pertama di Indonesia. Tanggal berdirinya diperingati sebagai Hari Kebangkitan Nasional."
+                    },
+                    {
+                        question: "Peristiwa Rengasdengklok terjadi karena...",
+                        options: [
+                            "A. Perbedaan pendapat tentang waktu proklamasi",
+                            "B. Pertempuran melawan tentara Jepang",
+                            "C. Perundingan dengan Belanda",
+                            "D. Persiapan pembentukan kabinet",
+                            "E. Penyusunan teks proklamasi"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Peristiwa Rengasdengklok terjadi karena perbedaan pendapat antara golongan muda dan tua tentang waktu pelaksanaan proklamasi kemerdekaan. Golongan muda ingin segera memproklamasikan kemerdekaan, sementara golongan tua ingin menunggu keputusan PPKI."
+                    },
+                    {
+                        question: "Tokoh yang mengetik naskah proklamasi adalah...",
+                        options: [
+                            "A. Sayuti Melik",
+                            "B. B.M. Diah",
+                            "C. Sukarni",
+                            "D. Latief Hendraningrat",
+                            "E. Chaerul Saleh"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Sayuti Melik adalah tokoh yang mengetik naskah proklamasi setelah disusun oleh Soekarno, Hatta, dan Achmad Soebardjo. Naskah asli kemudian ditandatangani oleh Soekarno dan Hatta."
+                    },
+                    {
+                        question: "Pertempuran 10 November 1945 terjadi di kota...",
+                        options: [
+                            "A. Jakarta",
+                            "B. Bandung",
+                            "C. Surabaya",
+                            "D. Yogyakarta",
+                            "E. Medan"
+                        ],
+                        correctAnswer: 2,
+                        explanation: "Pertempuran 10 November 1945 terjadi di Surabaya melawan tentara Sekutu. Pertempuran ini dipimpin oleh Bung Tomo dan diperingati sebagai Hari Pahlawan."
+                    },
+                    {
+                        question: "Konferensi Meja Bundar dilaksanakan di kota...",
+                        options: [
+                            "A. Jakarta",
+                            "B. Den Haag",
+                            "C. Yogyakarta",
+                            "D. Bandung",
+                            "E. New York"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Konferensi Meja Bundar dilaksanakan di Den Haag, Belanda pada tahun 1949. Hasil KMB adalah pengakuan kedaulatan Indonesia oleh Belanda, kecuali Irian Barat."
+                    },
+                    {
+                        question: "Tokoh yang dikenal sebagai Bapak Pendidikan Nasional adalah...",
+                        options: [
+                            "A. Ki Hajar Dewantara",
+                            "B. Dewi Sartika",
+                            "C. R.A. Kartini",
+                            "D. Douwes Dekker",
+                            "E. Tjipto Mangoenkoesoemo"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Ki Hajar Dewantara dikenal sebagai Bapak Pendidikan Nasional. Beliau mendirikan Taman Siswa dan terkenal dengan semboyan 'Ing Ngarso Sung Tulodho, Ing Madyo Mangun Karso, Tut Wuri Handayani'."
+                    },
+                    {
+                        question: "Peristiwa Bandung Lautan Api terjadi pada tahun...",
+                        options: [
+                            "A. 1945",
+                            "B. 1946",
+                            "C. 1947",
+                            "D. 1948",
+                            "E. 1949"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Peristiwa Bandung Lautan Api terjadi pada tanggal 23 Maret 1946. Rakyat Bandung membumihanguskan kota untuk mencegah tentara Sekutu dan NICA menguasai kota tersebut."
+                    }
                 ]
             },
             'SMP': {
                 'Sejarah': [
                     {
-                question: "Kerajaan Hindu tertua di Indonesia adalah...",
-                options: [
-                    "A. Sriwijaya",
-                    "B. Majapahit",
-                    "C. Kutai",
-                    "D. Tarumanegara",
-                    "E. Mataram Kuno"
-                ],
-                correctAnswer: 2,
-                explanation: "Kerajaan Kutai adalah kerajaan Hindu tertua di Indonesia yang berdiri sekitar abad ke-4 M di Kalimantan Timur."
-            },
-            {
-                question: "Prasasti peninggalan Kerajaan Tarumanegara yang ditemukan di Bogor adalah...",
-                options: [
-                    "A. Prasasti Ciaruteun",
-                    "B. Prasasti Talang Tuo",
-                    "C. Prasasti Kedukan Bukit",
-                    "D. Prasasti Kota Kapur",
-                    "E. Prasasti Tugu"
-                ],
-                correctAnswer: 0,
-                explanation: "Prasasti Ciaruteun adalah salah satu prasasti peninggalan Kerajaan Tarumanegara yang ditemukan di Bogor, Jawa Barat."
-            },
-            {
-                question: "Raja terkenal dari Kerajaan Majapahit yang memerintah pada masa kejayaannya adalah...",
-                options: [
-                    "A. Hayam Wuruk",
-                    "B. Ken Arok",
-                    "C. Kertanegara",
-                    "D. Balaputradewa",
-                    "E. Purnawarman"
-                ],
-                correctAnswer: 0,
-                explanation: "Hayam Wuruk adalah raja Majapahit yang memerintah pada masa kejayaan (1350-1389) dengan didampingi oleh Mahapatih Gajah Mada."
-            },
-            {
-                question: "Sumpah yang diucapkan oleh Gajah Mada untuk menyatukan Nusantara dikenal dengan nama...",
-                options: [
-                    "A. Sumpah Pemuda",
-                    "B. Sumpah Palapa",
-                    "C. Sumpah Amukti Palapa",
-                    "D. Sumpah Nusantara",
-                    "E. Sumpah Mahapatih"
-                ],
-                correctAnswer: 1,
-                explanation: "Sumpah Palapa adalah sumpah yang diucapkan Gajah Mada bahwa ia tidak akan memakan palapa sebelum berhasil menyatukan Nusantara."
-            },
-            {
-                question: "Kerajaan Islam pertama di Indonesia adalah...",
-                options: [
-                    "A. Samudera Pasai",
-                    "B. Demak",
-                    "C. Mataram Islam",
-                    "D. Banten",
-                    "E. Aceh Darussalam"
-                ],
-                correctAnswer: 0,
-                explanation: "Kerajaan Samudera Pasai di Aceh adalah kerajaan Islam pertama di Indonesia yang berdiri pada abad ke-13."
-            },
-            {
-                question: "Sultan pertama Kerajaan Demak adalah...",
-                options: [
-                    "A. Raden Patah",
-                    "B. Sultan Trenggono",
-                    "C. Sunan Kalijaga",
-                    "D. Sunan Ampel",
-                    "E. Sunan Bonang"
-                ],
-                correctAnswer: 0,
-                explanation: "Raden Patah adalah sultan pertama Kerajaan Demak yang memerintah sekitar tahun 1478-1518."
-            },
-            {
-                question: "Perang Diponegoro terjadi pada tahun...",
-                options: [
-                    "A. 1795-1805",
-                    "B. 1805-1815",
-                    "C. 1815-1825",
-                    "D. 1825-1830",
-                    "E. 1830-1835"
-                ],
-                correctAnswer: 3,
-                explanation: "Perang Diponegoro atau Perang Jawa terjadi antara tahun 1825-1830 melawan pemerintah kolonial Belanda."
-            },
-            {
-                question: "Tokoh yang memimpin perlawanan rakyat Maluku melawan Belanda adalah...",
-                options: [
-                    "A. Sultan Hasanuddin",
-                    "B. Pattimura",
-                    "C. Tuanku Imam Bonjol",
-                    "D. Pangeran Antasari",
-                    "E. Cut Nyak Dien"
-                ],
-                correctAnswer: 1,
-                explanation: "Pattimura (Thomas Matulessy) adalah tokoh yang memimpin perlawanan rakyat Maluku melawan Belanda pada tahun 1817."
-            },
-            {
-                question: "Perang Padri terjadi di wilayah...",
-                options: [
-                    "A. Jawa Barat",
-                    "B. Sumatera Barat",
-                    "C. Sulawesi Selatan",
-                    "D. Kalimantan Selatan",
-                    "E. Nusa Tenggara Timur"
-                ],
-                correctAnswer: 1,
-                explanation: "Perang Padri (1803-1838) terjadi di Sumatera Barat antara kaum Padri yang ingin memurnikan Islam dengan kaum Adat."
-            },
-            {
-                question: "Sultan Hasanuddin dari Makassar dijuluki oleh Belanda sebagai...",
-                options: [
-                    "A. Singa dari Timur",
-                    "B. Ayam Jantan dari Timur",
-                    "C. Harimau dari Selatan",
-                    "D. Elang dari Sulawesi",
-                    "E. Macan dari Makassar"
-                ],
-                correctAnswer: 1,
-                explanation: "Sultan Hasanuddin dijuluki 'Ayam Jantan dari Timur' oleh Belanda karena keberaniannya melawan VOC."
-            },
-            {
-                question: "Perlawanan rakyat Aceh melawan Belanda dipimpin oleh...",
-                options: [
-                    "A. Teuku Umar dan Cut Nyak Dien",
-                    "B. Pangeran Diponegoro",
-                    "C. Sultan Agung",
-                    "D. Sisingamangaraja XII",
-                    "E. Pangeran Antasari"
-                ],
-                correctAnswer: 0,
-                explanation: "Perlawanan rakyat Aceh melawan Belanda dipimpin oleh Teuku Umar dan istrinya Cut Nyak Dien."
-            },
-            {
-                question: "Organisasi pergerakan nasional pertama di Indonesia adalah...",
-                options: [
-                    "A. Budi Utomo",
-                    "B. Sarekat Islam",
-                    "C. Indische Partij",
-                    "D. Perhimpunan Indonesia",
-                    "E. Partai Nasional Indonesia"
-                ],
-                correctAnswer: 0,
-                explanation: "Budi Utomo yang didirikan pada 20 Mei 1908 dianggap sebagai organisasi pergerakan nasional pertama di Indonesia."
-            },
-            {
-                question: "Tokoh yang dikenal sebagai Bapak Pendidikan Nasional adalah...",
-                options: [
-                    "A. Ki Hajar Dewantara",
-                    "B. Douwes Dekker",
-                    "C. Cipto Mangunkusumo",
-                    "D. H.O.S. Cokroaminoto",
-                    "E. Agus Salim"
-                ],
-                correctAnswer: 0,
-                explanation: "Ki Hajar Dewantara (Suwardi Suryaningrat) dikenal sebagai Bapak Pendidikan Nasional dan pendiri Taman Siswa."
-            },
-            {
-                question: "Sumpah Pemuda diikrarkan pada tanggal...",
-                options: [
-                    "A. 20 Mei 1908",
-                    "B. 28 Oktober 1928",
-                    "C. 17 Agustus 1945",
-                    "D. 10 November 1945",
-                    "E. 1 Juni 1945"
-                ],
-                correctAnswer: 1,
-                explanation: "Sumpah Pemuda diikrarkan pada tanggal 28 Oktober 1928 dalam Kongres Pemuda II di Jakarta."
-            },
-            {
-                question: "Lagu Indonesia Raya pertama kali dikumandangkan pada acara...",
-                options: [
-                    "A. Proklamasi Kemerdekaan",
-                    "B. Kongres Pemuda I",
-                    "C. Kongres Pemuda II",
-                    "D. Pembentukan BPUPKI",
-                    "E. Peresmian PPKI"
-                ],
-                correctAnswer: 2,
-                explanation: "Lagu Indonesia Raya pertama kali dikumandangkan oleh Wage Rudolf Supratman pada Kongres Pemuda II tanggal 28 Oktober 1928."
-            },
-            {
-                question: "BPUPKI dibentuk oleh Jepang pada tanggal...",
-                options: [
-                    "A. 1 Maret 1945",
-                    "B. 29 April 1945",
-                    "C. 1 Juni 1945",
-                    "D. 22 Juni 1945",
-                    "E. 7 Agustus 1945"
-                ],
-                correctAnswer: 1,
-                explanation: "BPUPKI (Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia) dibentuk oleh Jepang pada 29 April 1945."
-            },
-            {
-                question: "Tokoh yang mengemukakan konsep Pancasila pertama kali adalah...",
-                options: [
-                    "A. Mohammad Hatta",
-                    "B. Soekarno",
-                    "C. Mohammad Yamin",
-                    "D. Soepomo",
-                    "E. Ahmad Soebardjo"
-                ],
-                correctAnswer: 1,
-                explanation: "Ir. Soekarno adalah tokoh yang pertama kali mengemukakan konsep Pancasila pada sidang BPUPKI tanggal 1 Juni 1945."
-            },
-            {
-                question: "Piagam Jakarta disusun pada tanggal...",
-                options: [
-                    "A. 1 Juni 1945",
-                    "B. 22 Juni 1945",
-                    "C. 17 Agustus 1945",
-                    "D. 18 Agustus 1945",
-                    "E. 29 April 1945"
-                ],
-                correctAnswer: 1,
-                explanation: "Piagam Jakarta disusun oleh Panitia Sembilan pada tanggal 22 Juni 1945 sebagai rancangan pembukaan UUD 1945."
-            },
-            {
-                question: "Proklamasi Kemerdekaan Indonesia dibacakan pada tanggal...",
-                options: [
-                    "A. 1 Juni 1945",
-                    "B. 17 Agustus 1945",
-                    "C. 18 Agustus 1945",
-                    "D. 28 Oktober 1928",
-                    "E. 10 November 1945"
-                ],
-                correctAnswer: 1,
-                explanation: "Proklamasi Kemerdekaan Indonesia dibacakan oleh Soekarno-Hatta pada tanggal 17 Agustus 1945 di Jakarta."
-            },
-            {
-                question: "Tokoh yang mengetik naskah proklamasi adalah...",
-                options: [
-                    "A. Sayuti Melik",
-                    "B. B.M. Diah",
-                    "C. Sukarni",
-                    "D. Latief Hendraningrat",
-                    "E. Sutan Syahrir"
-                ],
-                correctAnswer: 0,
-                explanation: "Sayuti Melik adalah tokoh yang mengetik naskah proklamasi setelah disusun oleh Soekarno, Hatta, dan Ahmad Soebardjo."
-            },
-            {
-                question: "Peristiwa Rengasdengklok terjadi karena...",
-                options: [
-                    "A. Jepang menyerah kepada Sekutu",
-                    "B. Perbedaan pendapat tentang waktu proklamasi",
-                    "C. Pertentangan antara golongan tua dan muda",
-                    "D. Upaya mencegah proklamasi oleh Jepang",
-                    "E. Persiapan untuk melawan Belanda"
-                ],
-                correctAnswer: 2,
-                explanation: "Peristiwa Rengasdengklok terjadi karena golongan muda mendesak golongan tua untuk segera memproklamasikan kemerdekaan."
-            },
-            {
-                question: "PPKI dibentuk pada tanggal...",
-                options: [
-                    "A. 1 Maret 1945",
-                    "B. 29 April 1945",
-                    "C. 7 Agustus 1945",
-                    "D. 17 Agustus 1945",
-                    "E. 18 Agustus 1945"
-                ],
-                correctAnswer: 2,
-                explanation: "PPKI (Panitia Persiapan Kemerdekaan Indonesia) dibentuk pada 7 Agustus 1945 untuk mempersiapkan kemerdekaan Indonesia."
-            },
-            {
-                question: "Pertempuran 10 November 1945 terjadi di...",
-                options: [
-                    "A. Jakarta",
-                    "B. Bandung",
-                    "C. Surabaya",
-                    "D. Yogyakarta",
-                    "E. Medan"
-                ],
-                correctAnswer: 2,
-                explanation: "Pertempuran 10 November 1945 terjadi di Surabaya melawan tentara Sekutu dan diperingati sebagai Hari Pahlawan."
-            },
-            {
-                question: "Pemimpin perlawanan rakyat Bandung dalam peristiwa Bandung Lautan Api adalah...",
-                options: [
-                    "A. Bung Tomo",
-                    "B. Kolonel Soedirman",
-                    "C. Mohammad Toha",
-                    "D. A.H. Nasution",
-                    "E. Sutan Syahrir"
-                ],
-                correctAnswer: 3,
-                explanation: "A.H. Nasution adalah salah satu pemimpin dalam peristiwa Bandung Lautan Api (24 Maret 1946) yang memutuskan untuk membumihanguskan Bandung."
-            },
-            {
-                question: "Perjanjian Renville ditandatangani pada tahun...",
-                options: [
-                    "A. 1945",
-                    "B. 1946",
-                    "C. 1947",
-                    "D. 1948",
-                    "E. 1949"
-                ],
-                correctAnswer: 3,
-                explanation: "Perjanjian Renville ditandatangani pada 17 Januari 1948 di atas kapal USS Renville milik Amerika Serikat."
-            },
-            {
-                question: "Agresi Militer Belanda II terjadi pada tanggal...",
-                options: [
-                    "A. 21 Juli 1947",
-                    "B. 19 Desember 1948",
-                    "C. 17 Agustus 1945",
-                    "D. 10 November 1945",
-                    "E. 1 Maret 1949"
-                ],
-                correctAnswer: 1,
-                explanation: "Agresi Militer Belanda II terjadi pada 19 Desember 1948 dengan menyerang Yogyakarta dan menangkap pemimpin Indonesia."
-            },
-            {
-                question: "Serangan Umum 1 Maret 1949 dipimpin oleh...",
-                options: [
-                    "A. Jenderal Soedirman",
-                    "B. Letkol Soeharto",
-                    "C. Sultan Hamengkubuwono IX",
-                    "D. Kolonel A.H. Nasution",
-                    "E. Bung Tomo"
-                ],
-                correctAnswer: 1,
-                explanation: "Serangan Umum 1 Maret 1949 dipimpin oleh Letkol Soeharto untuk menunjukkan eksistensi TNI dan Republik Indonesia."
-            },
-            {
-                question: "Konferensi Meja Bundar dilaksanakan di...",
-                options: [
-                    "A. Jakarta",
-                    "B. Den Haag",
-                    "C. New York",
-                    "D. London",
-                    "E. Geneva"
-                ],
-                correctAnswer: 1,
-                explanation: "Konferensi Meja Bundar (KMB) dilaksanakan di Den Haag, Belanda dari 23 Agustus hingga 2 November 1949."
-            },
-            {
-                question: "Indonesia diakui kedaulatannya oleh Belanda pada tanggal...",
-                options: [
-                    "A. 17 Agustus 1945",
-                    "B. 27 Desember 1949",
-                    "C. 17 Agustus 1950",
-                    "D. 5 Juli 1959",
-                    "E. 1 Juni 1945"
-                ],
-                correctAnswer: 1,
-                explanation: "Belanda mengakui kedaulatan Indonesia melalui KMB pada 27 Desember 1949, kecuali Papua Barat."
-            },
-            {
-                question: "Sistem pemerintahan Indonesia setelah pengakuan kedaulatan adalah...",
-                options: [
-                    "A. Kesatuan",
-                    "B. Federal",
-                    "C. Monarki",
-                    "D. Otokrasi",
-                    "E. Komunis"
-                ],
-                correctAnswer: 1,
-                explanation: "Setelah pengakuan kedaulatan, Indonesia menganut sistem federal dengan nama Republik Indonesia Serikat (RIS)."
-            },
-            {
-                question: "Pemilihan Umum pertama di Indonesia dilaksanakan pada tahun...",
-                options: [
-                    "A. 1945",
-                    "B. 1950",
-                    "C. 1955",
-                    "D. 1959",
-                    "E. 1965"
-                ],
-                correctAnswer: 2,
-                explanation: "Pemilu pertama di Indonesia dilaksanakan pada tahun 1955 untuk memilih anggota DPR dan Konstituante."
-            },
-            {
-                question: "Dekrit Presiden 5 Juli 1959 berisi tentang...",
-                options: [
-                    "A. Pembubaran RIS",
-                    "B. Kembali ke UUD 1945",
-                    "C. Pembentukan NASAKOM",
-                    "D. Pelaksanaan Demokrasi Terpimpin",
-                    "E. Penyatuan Irian Barat"
-                ],
-                correctAnswer: 1,
-                explanation: "Dekrit Presiden 5 Juli 1959 berisi tentang pembubaran Konstituante dan kembali ke UUD 1945."
-            },
-            {
-                question: "Operasi Trikora bertujuan untuk...",
-                options: [
-                    "A. Menumpas pemberontakan DI/TII",
-                    "B. Membebaskan Irian Barat",
-                    "C. Menghadapi Malaysia",
-                    "D. Menumpas PKI",
-                    "E. Menghadapi Belanda"
-                ],
-                correctAnswer: 1,
-                explanation: "Operasi Trikora (Tri Komando Rakyat) dilancarkan pada 19 Desember 1961 untuk membebaskan Irian Barat dari Belanda."
-            },
-            {
-                question: "Peristiwa G30S/PKI terjadi pada tahun...",
-                options: [
-                    "A. 1945",
-                    "B. 1955",
-                    "C. 1959",
-                    "D. 1965",
-                    "E. 1975"
-                ],
-                correctAnswer: 3,
-                explanation: "Peristiwa Gerakan 30 September 1965 (G30S/PKI) adalah peristiwa penculikan dan pembunuhan para jenderal TNI."
-            },
-            {
-                question: "Orde Baru dimulai setelah dikeluarkannya...",
-                options: [
-                    "A. Supersemar",
-                    "B. Dekrit Presiden",
-                    "C. Tritura",
-                    "D. Dwikora",
-                    "E. Pelaksanaan Pemilu"
-                ],
-                correctAnswer: 0,
-                explanation: "Orde Baru dimulai setelah dikeluarkannya Surat Perintah Sebelas Maret (Supersemar) tahun 1966."
-            },
-            {
-                question: "Pemilu pertama pada masa Orde Baru dilaksanakan pada tahun...",
-                options: [
-                    "A. 1965",
-                    "B. 1967",
-                    "C. 1971",
-                    "D. 1975",
-                    "E. 1980"
-                ],
-                correctAnswer: 2,
-                explanation: "Pemilu pertama pada masa Orde Baru dilaksanakan pada tahun 1971 setelah masa transisi."
-            },
-            {
-                question: "Krisis ekonomi yang melanda Asia termasuk Indonesia terjadi pada tahun...",
-                options: [
-                    "A. 1995",
-                    "B. 1997",
-                    "C. 1998",
-                    "D. 1999",
-                    "E. 2000"
-                ],
-                correctAnswer: 1,
-                explanation: "Krisis ekonomi Asia terjadi pada tahun 1997 yang berdampak besar pada ekonomi Indonesia."
-            },
-            {
-                question: "Reformasi di Indonesia dimulai pada tahun...",
-                options: [
-                    "A. 1995",
-                    "B. 1997",
-                    "C. 1998",
-                    "D. 1999",
-                    "E. 2000"
-                ],
-                correctAnswer: 2,
-                explanation: "Reformasi di Indonesia dimulai pada tahun 1998 yang ditandai dengan lengsernya Presiden Soeharto."
-            },
-            {
-                question: "Presiden pertama Indonesia setelah era Reformasi adalah...",
-                options: [
-                    "A. Megawati Soekarnoputri",
-                    "B. Abdurrahman Wahid",
-                    "C. Susilo Bambang Yudhoyono",
-                    "D. B.J. Habibie",
-                    "E. Joko Widodo"
-                ],
-                correctAnswer: 3,
-                explanation: "B.J. Habibie menjadi presiden pertama setelah era Reformasi, menggantikan Soeharto yang mengundurkan diri."
-            },
-            {
-                question: "Pemilu pertama era Reformasi dilaksanakan pada tahun...",
-                options: [
-                    "A. 1997",
-                    "B. 1998",
-                    "C. 1999",
-                    "D. 2000",
-                    "E. 2001"
-                ],
-                correctAnswer: 2,
-                explanation: "Pemilu pertama era Reformasi dilaksanakan pada tahun 1999 yang diikuti oleh banyak partai politik."
-            },
-            {
-                question: "Amandemen UUD 1945 pertama kali dilakukan pada tahun...",
-                options: [
-                    "A. 1998",
-                    "B. 1999",
-                    "C. 2000",
-                    "D. 2001",
-                    "E. 2002"
-                ],
-                correctAnswer: 1,
-                explanation: "Amandemen UUD 1945 pertama dilakukan pada tahun 1999 oleh MPR hasil Pemilu 1999."
-            },
-            {
-                question: "Pemilihan presiden secara langsung pertama kali dilaksanakan pada tahun...",
-                options: [
-                    "A. 1999",
-                    "B. 2001",
-                    "C. 2004",
-                    "D. 2009",
-                    "E. 2014"
-                ],
-                correctAnswer: 2,
-                explanation: "Pemilihan presiden secara langsung pertama kali dilaksanakan pada tahun 2004 yang dimenangkan oleh Susilo Bambang Yudhoyono."
-            },
-            {
-                question: "Tsunami Aceh terjadi pada tahun...",
-                options: [
-                    "A. 2002",
-                    "B. 2003",
-                    "C. 2004",
-                    "D. 2005",
-                    "E. 2006"
-                ],
-                correctAnswer: 2,
-                explanation: "Tsunami besar melanda Aceh dan sekitarnya pada 26 Desember 2004 akibat gempa bumi di Samudera Hindia."
-            },
-            {
-                question: "Presiden Indonesia pertama yang dipilih melalui pemilihan langsung adalah...",
-                options: [
-                    "A. Megawati Soekarnoputri",
-                    "B. Abdurrahman Wahid",
-                    "C. Susilo Bambang Yudhoyono",
-                    "D. B.J. Habibie",
-                    "E. Joko Widodo"
-                ],
-                correctAnswer: 2,
-                explanation: "Susilo Bambang Yudhoyono adalah presiden Indonesia pertama yang dipilih secara langsung oleh rakyat pada tahun 2004."
-            },
-            {
-                question: "Joko Widodo pertama kali terpilih sebagai presiden pada tahun...",
-                options: [
-                    "A. 2009",
-                    "B. 2012",
-                    "C. 2014",
-                    "D. 2019",
-                    "E. 2020"
-                ],
-                correctAnswer: 2,
-                explanation: "Joko Widodo pertama kali terpilih sebagai presiden pada Pemilu 2014 dan dilantik pada 20 Oktober 2014."
-            },
-            {
-                question: "Ibu kota Indonesia dipindahkan ke Nusantara berdasarkan Undang-Undang yang disahkan pada tahun...",
-                options: [
-                    "A. 2019",
-                    "B. 2020",
-                    "C. 2021",
-                    "D. 2022",
-                    "E. 2023"
-                ],
-                correctAnswer: 2,
-                explanation: "Pemindahan ibu kota ke Nusantara di Kalimantan Timur disahkan melalui UU Ibu Kota Negara pada tahun 2021."
-            }
+                        question: "Pembentukan BPUPKI bertujuan untuk...",
+                        options: [
+                            "A. Mempersiapkan kemerdekaan Indonesia",
+                            "B. Melawan pendudukan Jepang",
+                            "C. Menjadi badan legislatif sementara",
+                            "D. Membantu Jepang dalam Perang Asia Timur Raya",
+                            "E. Menyelidiki usaha persiapan kemerdekaan"
+                        ],
+                        correctAnswer: 4,
+                        explanation: "BPUPKI (Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia) dibentuk Jepang pada 1 Maret 1945 dengan tujuan menyelidiki usaha-usaha persiapan kemerdekaan Indonesia."
+                    },
+                    {
+                        question: "Peristiwa penting yang terjadi pada 16 Agustus 1945 adalah...",
+                        options: [
+                            "A. Pembacaan teks proklamasi",
+                            "B. Peristiwa Rengasdengklok",
+                            "C. Pembentukan PPKI",
+                            "D. Penyerahan Jepang kepada Sekutu",
+                            "E. Pertempuran Surabaya"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Peristiwa Rengasdengklok terjadi pada 16 Agustus 1945 dimana golongan muda 'menculik' Soekarno-Hatta ke Rengasdengklok untuk mendesak proklamasi kemerdekaan secepatnya."
+                    },
+                    {
+                        question: "Isi Perjanjian Renville antara Indonesia dan Belanda adalah...",
+                        options: [
+                            "A. Belanda mengakui kedaulatan Indonesia",
+                            "B. Indonesia harus mengakui wilayah yang dikuasai Belanda",
+                            "C. Belanda akan segera meninggalkan Indonesia",
+                            "D. Indonesia menjadi negara bagian RIS",
+                            "E. Irian Barat diserahkan kepada Indonesia"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Perjanjian Renville (1948) berisi pengakuan wilayah yang dikuasai Belanda (hasil Agresi Militer I) dan Indonesia harus menarik pasukan dari wilayah tersebut."
+                    },
+                    {
+                        question: "Pemimpin perlawanan rakyat Bali terhadap Belanda adalah...",
+                        options: [
+                            "A. Pangeran Diponegoro",
+                            "B. Sultan Hasanuddin",
+                            "C. I Gusti Ngurah Rai",
+                            "D. Pattimura",
+                            "E. Teuku Umar"
+                        ],
+                        correctAnswer: 2,
+                        explanation: "I Gusti Ngurah Rai memimpin perlawanan rakyat Bali dalam Perang Puputan Margarana melawan Belanda pada tahun 1946."
+                    },
+                    {
+                        question: "Konferensi Asia Afrika pertama dilaksanakan di...",
+                        options: [
+                            "A. Jakarta",
+                            "B. Bandung",
+                            "C. Bangkok",
+                            "D. New Delhi",
+                            "E. Colombo"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Konferensi Asia Afrika pertama dilaksanakan di Bandung pada tahun 1955. Konferensi ini menghasilkan Dasasila Bandung yang menjadi dasar Gerakan Non-Blok."
+                    },
+                    {
+                        question: "Pemberontakan PKI Madiun terjadi pada tahun...",
+                        options: [
+                            "A. 1945",
+                            "B. 1946",
+                            "C. 1947",
+                            "D. 1948",
+                            "E. 1949"
+                        ],
+                        correctAnswer: 3,
+                        explanation: "Pemberontakan PKI Madiun terjadi pada 18 September 1948 yang dipimpin oleh Muso dan Amir Syarifuddin. Pemberontakan ini berhasil ditumpas oleh pemerintah dalam waktu singkat."
+                    },
+                    {
+                        question: "Tokoh yang dikenal sebagai Bapak Koperasi Indonesia adalah...",
+                        options: [
+                            "A. Mohammad Hatta",
+                            "B. Soekarno",
+                            "C. Syafruddin Prawiranegara",
+                            "D. Sutan Sjahrir",
+                            "E. Ki Hajar Dewantara"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Mohammad Hatta dikenal sebagai Bapak Koperasi Indonesia karena peran besarnya dalam mengembangkan gerakan koperasi di Indonesia."
+                    },
+                    {
+                        question: "Peristiwa Serangan Umum 1 Maret 1949 bertujuan untuk...",
+                        options: [
+                            "A. Merebut Yogyakarta dari Belanda",
+                            "B. Mempertahankan kemerdekaan Indonesia",
+                            "C. Membuktikan eksistensi TNI kepada dunia",
+                            "D. Memperingati setahun Agresi Militer Belanda II",
+                            "E. Menunjukkan kekuatan militer Indonesia"
+                        ],
+                        correctAnswer: 2,
+                        explanation: "Serangan Umum 1 Maret 1949 dipimpin oleh Letkol Soeharto bertujuan untuk membuktikan kepada dunia bahwa TNI masih ada dan Republik Indonesia masih berdiri meskipun ibukota Yogyakarta diduduki Belanda."
+                    },
+                    {
+                        question: "Pemimpin perlawanan rakyat Aceh melawan Belanda adalah...",
+                        options: [
+                            "A. Cut Nyak Dien",
+                            "B. Teuku Umar",
+                            "C. Panglima Polim",
+                            "D. Cut Meutia",
+                            "E. Semua jawaban benar"
+                        ],
+                        correctAnswer: 4,
+                        explanation: "Semua tokoh tersebut adalah pemimpin perlawanan rakyat Aceh melawan Belanda. Perang Aceh berlangsung sangat lama (1873-1904) karena perlawanan sengit rakyat Aceh."
+                    },
+                    {
+                        question: "Pemerintah Darurat Republik Indonesia (PDRI) dipimpin oleh...",
+                        options: [
+                            "A. Soekarno",
+                            "B. Mohammad Hatta",
+                            "C. Syafruddin Prawiranegara",
+                            "D. Sutan Sjahrir",
+                            "E. Mr. Assaat"
+                        ],
+                        correctAnswer: 2,
+                        explanation: "PDRI dibentuk di Bukittinggi setelah Agresi Militer Belanda II dan Yogyakarta jatuh. Syafruddin Prawiranegara ditunjuk sebagai ketua PDRI untuk melanjutkan pemerintahan Republik Indonesia."
+                    }
                 ]
             },
             'SMA/SMK': {
                 'Sejarah': [
                     {
-                question: "Peristiwa Rengasdengklok terjadi karena...",
-                options: [
-                    "A. Perbedaan pendapat antara golongan muda dan tua tentang proklamasi kemerdekaan",
-                    "B. Upaya Belanda untuk menguasai kembali Indonesia setelah Jepang menyerah",
-                    "C. Pertentangan antara pihak sekutu dan Jepang di Indonesia",
-                    "D. Perselisihan antara Soekarno dan Hatta tentang bentuk negara",
-                    "E. Upaya golongan muda untuk mencegah proklamasi kemerdekaan"
-                ],
-                correctAnswer: 0,
-                explanation: "Peristiwa Rengasdengklok terjadi karena perbedaan pendapat antara golongan muda yang ingin segera memproklamasikan kemerdekaan dan golongan tua yang ingin menunggu keputusan PPKI."
-            },
-            {
-                question: "Latar belakang utama terjadinya Perang Diponegoro (1825-1830) adalah...",
-                options: [
-                    "A. Campur tangan Belanda dalam urusan internal Kesultanan Yogyakarta",
-                    "B. Pembangunan jalan oleh Belanda yang melintasi makam leluhur Pangeran Diponegoro",
-                    "C. Penolakan Pangeran Diponegoro terhadap sistem pajak yang diberlakukan Belanda",
-                    "D. Perebutan tahta Kesultanan Yogyakarta antara Pangeran Diponegoro dan Hamengkubuwono V",
-                    "E. Perlawanan terhadap penyebaran agama Kristen oleh Belanda"
-                ],
-                correctAnswer: 2,
-                explanation: "Sebab utama Perang Diponegoro adalah penolakan Pangeran Diponegoro terhadap sistem pajak dan penyewaan tanah yang memberatkan rakyat, serta campur tangan Belanda dalam urusan keraton."
-            },
-            {
-                question: "Pembentukan Volksraad pada tahun 1918 oleh pemerintah kolonial Belanda bertujuan untuk...",
-                options: [
-                    "A. Memberikan kemerdekaan penuh kepada Indonesia",
-                    "B. Membentuk pemerintahan sementara Indonesia",
-                    "C. Sebagai lembaga perwakilan rakyat yang bersifat semu",
-                    "D. Mempersiapkan Indonesia menjadi negara persemakmuran Belanda",
-                    "E. Menghapuskan sistem tanam paksa secara keseluruhan"
-                ],
-                correctAnswer: 2,
-                explanation: "Volksraad dibentuk sebagai lembaga perwakilan semu untuk menampung aspirasi rakyat Indonesia namun tanpa kekuasaan nyata, sebagai strategi politik Belanda untuk meredam tuntutan kemerdekaan."
-            },
-            {
-                question: "Perjanjian Linggarjati (1947) antara Indonesia dan Belanda berisi beberapa poin penting, kecuali...",
-                options: [
-                    "A. Belanda mengakui secara de facto Republik Indonesia dengan wilayah Jawa, Madura, dan Sumatera",
-                    "B. Pembentukan Republik Indonesia Serikat yang berdaulat penuh",
-                    "C. Republik Indonesia Serikat akan bekerja sama dalam Uni Indonesia-Belanda",
-                    "D. Belanda akan segera menarik semua pasukannya dari Indonesia",
-                    "E. Pembentukan negara federal sementara sebelum RIS"
-                ],
-                correctAnswer: 3,
-                explanation: "Perjanjian Linggarjati tidak mencantumkan penarikan pasukan Belanda dari Indonesia, yang kemudian menjadi salah satu penyebab kegagalan perjanjian ini."
-            },
-            {
-                question: "Pemberontakan PKI Madiun 1948 dilatarbelakangi oleh...",
-                options: [
-                    "A. Penolakan terhadap hasil Perjanjian Renville",
-                    "B. Kekecewaan terhadap kepemimpinan Soekarno-Hatta",
-                    "C. Upaya mendirikan negara komunis di Indonesia",
-                    "D. Protes terhadap kebijakan ekonomi pemerintah",
-                    "E. Penentangan terhadap sistem demokrasi liberal"
-                ],
-                correctAnswer: 2,
-                explanation: "Pemberontakan PKI Madiun 1948 merupakan upaya Muso dan Amir Syarifuddin untuk mendirikan negara komunis di Indonesia dengan menggulingkan pemerintah RI yang sah."
-            },
-            {
-                question: "Peristiwa Bandung Lautan Api terjadi dalam konteks...",
-                options: [
-                    "A. Perlawanan rakyat Bandung terhadap pendudukan Jepang",
-                    "B. Strategi TRI dan rakyat Bandung menghadapi Sekutu dan NICA",
-                    "C. Pertempuran antara pasukan DI/TII dengan pemerintah RI",
-                    "D. Konflik internal di tubuh TNI di Bandung",
-                    "E. Pembumihangusan kota Bandung oleh Belanda"
-                ],
-                correctAnswer: 1,
-                explanation: "Peristiwa Bandung Lautan Api adalah strategi TRI dan rakyat Bandung yang membakar kota untuk menghancurkan nilai strategisnya dan mundur ke luar kota dalam menghadapi serangan Sekutu/NICA."
-            },
-            {
-                question: "Penyebab utama kegagalan sistem tanam paksa (cultuurstelsel) di Jawa adalah...",
-                options: [
-                    "A. Tekanan dari pemerintah Belanda untuk menghentikannya",
-                    "B. Perlawanan bersenjata dari petani Jawa",
-                    "C. Kritik dari kaum liberal Belanda dan praktik penyimpangan yang merugikan rakyat",
-                    "D. Bencana alam yang menghancurkan perkebunan",
-                    "E. Perang Diponegoro yang mengganggu sistem ini"
-                ],
-                correctAnswer: 2,
-                explanation: "Sistem tanam paksa akhirnya dihapuskan karena tekanan dari kaum liberal Belanda yang mengkritik praktik eksploitatifnya, serta berbagai penyimpangan yang menyengsarakan rakyat Jawa."
-            },
-            {
-                question: "Peran Sutan Syahrir dalam perjuangan kemerdekaan Indonesia yang paling menonjol adalah...",
-                options: [
-                    "A. Memimpin perlawanan bersenjata melawan Belanda",
-                    "B. Merumuskan konsep diplomasi dalam perjuangan kemerdekaan",
-                    "C. Menjadi tokoh utama dalam penyusunan UUD 1945",
-                    "D. Memimpin gerakan non-kooperatif dengan Jepang",
-                    "E. Mendirikan partai politik pertama di Indonesia"
-                ],
-                correctAnswer: 1,
-                explanation: "Sutan Syahrir dikenal sebagai arsitek diplomasi Indonesia dalam perjuangan kemerdekaan, termasuk dalam perundingan-perundingan dengan Belanda pasca-proklamasi."
-            },
-            {
-                question: "Konferensi Meja Bundar (KMB) tahun 1949 menghasilkan beberapa keputusan penting, kecuali...",
-                options: [
-                    "A. Pengakuan kedaulatan Indonesia oleh Belanda",
-                    "B. Pembentukan Republik Indonesia Serikat (RIS)",
-                    "C. Penyelesaian masalah Irian Barat dalam waktu setahun",
-                    "D. Pembentukan Uni Indonesia-Belanda",
-                    "E. Penarikan pasukan Belanda dari Indonesia"
-                ],
-                correctAnswer: 2,
-                explanation: "KMB tidak menyelesaikan masalah Irian Barat, yang justru menjadi masalah berkepanjangan hingga tahun 1960-an melalui Pepera."
-            },
-            {
-                question: "Gerakan Non-Blok (GNB) didirikan dengan tujuan utama...",
-                options: [
-                    "A. Melawan dominasi negara-negara Barat",
-                    "B. Menjadi alternatif di tengah persaingan Blok Barat dan Timur",
-                    "C. Mempromosikan sistem komunisme di dunia",
-                    "D. Membentuk aliansi militer negara-negara berkembang",
-                    "E. Menentang semua bentuk kolonialisme dan imperialisme"
-                ],
-                correctAnswer: 1,
-                explanation: "GNB didirikan untuk memberikan alternatif bagi negara-negara yang tidak ingin terlibat dalam persaingan Blok Barat (AS) dan Blok Timur (Uni Soviet) selama Perang Dingin."
-            },
-            {
-                question: "Peristiwa Malari (Malapetaka Lima Belas Januari) 1974 dilatarbelakangi oleh...",
-                options: [
-                    "A. Penolakan terhadap kenaikan harga BBM",
-                    "B. Protes terhadap dominasi modal asing khususnya Jepang",
-                    "C. Tuntutan reformasi politik dan demokrasi",
-                    "D. Penolakan terhadap Pemilu 1971",
-                    "E. Konflik antara mahasiswa dan militer"
-                ],
-                correctAnswer: 1,
-                explanation: "Malari 1974 terutama dipicu oleh protes mahasiswa terhadap dominasi modal asing khususnya Jepang dan ketimpangan pembangunan di era Orde Baru."
-            },
-            {
-                question: "Penyebab utama meletusnya Perang Aceh (1873-1904) adalah...",
-                options: [
-                    "A. Penolakan Aceh terhadap agama Islam",
-                    "B. Keinginan Belanda menguasai wilayah strategis Selat Malaka",
-                    "C. Perebutan sumber daya alam di Aceh",
-                    "D. Persaingan antara kesultanan Aceh dan Deli",
-                    "E. Intervensi Inggris dalam urusan Aceh"
-                ],
-                correctAnswer: 1,
-                explanation: "Perang Aceh terutama disebabkan oleh keinginan Belanda menguasai wilayah strategis di sekitar Selat Malaka dan kekhawatiran akan pengaruh asing lainnya di Aceh."
-            },
-            {
-                question: "Peran Pattimura dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Sumatra Barat",
-                    "B. Maluku",
-                    "C. Jawa Tengah",
-                    "D. Sulawesi Selatan",
-                    "E. Kalimantan Barat"
-                ],
-                correctAnswer: 1,
-                explanation: "Pattimura (Thomas Matulessy) memimpin perlawanan rakyat Maluku terhadap Belanda pada tahun 1817, terutama di Saparua dan Ambon."
-            },
-            {
-                question: "Sumpah Pemuda 1928 memiliki arti penting karena...",
-                options: [
-                    "A. Merupakan awal perlawanan bersenjata terhadap Belanda",
-                    "B. Menyatukan berbagai organisasi pemuda dalam satu partai politik",
-                    "C. Mempertegas konsep bangsa Indonesia yang satu tanpa melihat perbedaan",
-                    "D. Mendeklarasikan kemerdekaan Indonesia secara resmi",
-                    "E. Menolak semua pengaruh budaya asing di Indonesia"
-                ],
-                correctAnswer: 2,
-                explanation: "Sumpah Pemuda 1928 memiliki arti penting dalam mempertegas persatuan bangsa Indonesia yang melampaui batas etnis, bahasa, dan daerah."
-            },
-            {
-                question: "Pemerintah Darurat Republik Indonesia (PDRI) dibentuk di Bukittinggi pada tahun 1948 dengan tujuan...",
-                options: [
-                    "A. Menggantikan pemerintahan Soekarno-Hatta yang dianggap tidak efektif",
-                    "B. Melanjutkan pemerintahan RI setelah ibukota Yogyakarta jatuh ke Belanda",
-                    "C. Membentuk negara tandingan untuk melawan Belanda",
-                    "D. Menyatukan semua kekuatan gerilya di Sumatra",
-                    "E. Mempersiapkan pembentukan negara federal"
-                ],
-                correctAnswer: 1,
-                explanation: "PDRI dibentuk oleh Sjafruddin Prawiranegara untuk menjamin kelangsungan pemerintahan RI setelah Yogyakarta jatuh dan Soekarno-Hatta ditangkap Belanda dalam Agresi Militer II."
-            },
-            {
-                question: "Peran Tan Malaka dalam perjuangan kemerdekaan Indonesia yang paling menonjol adalah...",
-                options: [
-                    "A. Merumuskan konsep republik pertama kali",
-                    "B. Memimpin perlawanan bersenjata melawan Belanda",
-                    "C. Menjadi mediator antara Indonesia dan Belanda",
-                    "D. Mendirikan partai komunis pertama di Indonesia",
-                    "E. Menyusun strategi diplomasi internasional"
-                ],
-                correctAnswer: 0,
-                explanation: "Tan Malaka dikenal sebagai salah satu tokoh pertama yang merumuskan konsep Republik Indonesia melalui bukunya 'Naar de Republiek Indonesia' (1925)."
-            },
-            {
-                question: "Penyebab utama kegagalan Demokrasi Terpimpin (1959-1965) adalah...",
-                options: [
-                    "A. Campur tangan asing dalam pemerintahan",
-                    "B. Dominasi militer dalam politik praktis",
-                    "C. Penyimpangan dari prinsip-prinsip demokrasi dan konsentrasi kekuasaan",
-                    "D. Kegagalan ekonomi yang parah",
-                    "E. Perlawanan dari daerah-daerah"
-                ],
-                correctAnswer: 2,
-                explanation: "Demokrasi Terpimpin gagal terutama karena penyimpangan dari prinsip demokrasi, konsentrasi kekuasaan di tangan Soekarno, dan menguatnya peran PKI."
-            },
-            {
-                question: "Peristiwa Kudeta Angkatan Perang Ratu Adil (APRA) tahun 1950 dilakukan oleh...",
-                options: [
-                    "A. Raymond Westerling",
-                    "B. Andi Azis",
-                    "C. Kahar Muzakkar",
-                    "D. Daud Beureueh",
-                    "E. Kartosuwiryo"
-                ],
-                correctAnswer: 0,
-                explanation: "APRA adalah kudeta yang dilakukan oleh Raymond Westerling, mantan tentara KNIL, yang ingin mempertahankan negara federal dan melawan Republik Indonesia."
-            },
-            {
-                question: "Perjanjian New York tahun 1962 berkaitan dengan penyelesaian masalah...",
-                options: [
-                    "A. Konfrontasi Indonesia-Malaysia",
-                    "B. Sengketa Pulau Sipadan-Ligitan",
-                    "C. Irian Barat",
-                    "D. Timor Timur",
-                    "E. Kerusuhan rasial 1960-an"
-                ],
-                correctAnswer: 2,
-                explanation: "Perjanjian New York 1962 menjadi dasar penyelesaian sengketa Irian Barat antara Indonesia dan Belanda melalui UNTEA dan Pepera."
-            },
-            {
-                question: "Penyebab utama meletusnya Perang Padri (1803-1838) di Sumatra Barat adalah...",
-                options: [
-                    "A. Persaingan antara kaum adat dan kaum agama",
-                    "B. Perlawanan terhadap sistem tanam paksa Belanda",
-                    "C. Perebutan sumber daya alam emas",
-                    "D. Penolakan terhadap kekuasaan Kesultanan Aceh",
-                    "E. Perlawanan terhadap penyebaran agama Kristen"
-                ],
-                correctAnswer: 0,
-                explanation: "Perang Padri awalnya dipicu oleh konflik antara Kaum Padri (penganut Islam puritan) dengan Kaum Adat yang mempertahankan tradisi, sebelum kemudian berubah menjadi perlawanan terhadap Belanda."
-            },
-            {
-                question: "Peran Sultan Hasanuddin dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Maluku",
-                    "B. Sulawesi Selatan",
-                    "C. Jawa Timur",
-                    "D. Kalimantan Barat",
-                    "E. Nusa Tenggara Timur"
-                ],
-                correctAnswer: 1,
-                explanation: "Sultan Hasanuddin memimpin perlawanan Kerajaan Gowa terhadap VOC Belanda di Sulawesi Selatan pada abad ke-17, sehingga dijuluki 'Ayam Jantan dari Timur'."
-            },
-            {
-                question: "Tujuan utama pembentukan ASEAN pada tahun 1967 adalah...",
-                options: [
-                    "A. Membentuk aliansi militer melawan komunis",
-                    "B. Meningkatkan kerjasama ekonomi dan stabilitas regional",
-                    "C. Menyaingi organisasi PBB",
-                    "D. Memblokade pengaruh Barat di Asia Tenggara",
-                    "E. Menyatukan semua negara Asia dalam satu federasi"
-                ],
-                correctAnswer: 1,
-                explanation: "ASEAN didirikan terutama untuk meningkatkan kerjasama ekonomi, sosial, budaya, dan menjaga stabilitas politik di kawasan Asia Tenggara."
-            },
-            {
-                question: "Penyebab utama meletusnya Perang Banjar (1859-1905) adalah...",
-                options: [
-                    "A. Campur tangan Belanda dalam suksesi kerajaan",
-                    "B. Penolakan terhadap sistem monopoli perdagangan VOC",
-                    "C. Perlawanan terhadap penyebaran agama Kristen",
-                    "D. Perebutan sumber daya alam intan",
-                    "E. Persaingan dengan Kesultanan Brunei"
-                ],
-                correctAnswer: 0,
-                explanation: "Perang Banjar terutama dipicu oleh campur tangan Belanda dalam suksesi kerajaan dan pengangkatan Tamjidillah sebagai Sultan yang tidak disukai rakyat."
-            },
-            {
-                question: "Peran Dewi Sartika dalam perjuangan bangsa Indonesia yang paling menonjol adalah...",
-                options: [
-                    "A. Memimpin perlawanan bersenjata melawan Belanda",
-                    "B. Mendirikan sekolah untuk kaum perempuan",
-                    "C. Menjadi anggota Volksraad pertama dari kalangan pribumi",
-                    "D. Menulis karya sastra yang mengkritik kolonialisme",
-                    "E. Mendirikan organisasi politik perempuan pertama"
-                ],
-                correctAnswer: 1,
-                explanation: "Dewi Sartika dikenal sebagai pelopor pendidikan untuk perempuan pribumi dengan mendirikan Sakola Istri (1904) di Bandung yang kemudian berkembang menjadi Sakola Kautamaan Istri."
-            },
-            {
-                question: "Penyebab utama kegagalan Kabinet-Kabinet pada masa Demokrasi Liberal (1950-1959) adalah...",
-                options: [
-                    "A. Campur tangan militer dalam politik",
-                    "B. Dominasi partai politik tunggal",
-                    "C. Fragmentasi politik dan seringnya mosi tidak percaya",
-                    "D. Tekanan dari negara-negara asing",
-                    "E. Krisis ekonomi global"
-                ],
-                correctAnswer: 2,
-                explanation: "Kabinet-kabinet pada masa Demokrasi Liberal sering jatuh karena fragmentasi politik, seringnya mosi tidak percaya, dan sulitnya mencapai konsensus antar partai."
-            },
-            {
-                question: "Peristiwa Tiga Daerah (1945) terjadi di wilayah...",
-                options: [
-                    "A. Jawa Barat",
-                    "B. Jawa Tengah",
-                    "C. Jawa Timur",
-                    "D. Sumatra Utara",
-                    "E. Sulawesi Selatan"
-                ],
-                correctAnswer: 1,
-                explanation: "Peristiwa Tiga Daerah (Brebes, Tegal, Pemalang) di Jawa Tengah tahun 1945 merupakan konflik sosial antara kelompok revolusioner dengan mantan pegawai pemerintah kolonial."
-            },
-            {
-                question: "Peran Martha Christina Tiahahu dalam perjuangan melawan Belanda adalah...",
-                options: [
-                    "A. Memimpin pasukan perempuan di Jawa Barat",
-                    "B. Menjadi penyusun strategi perang di Sumatra",
-                    "C. Berjuang melawan Belanda di Maluku",
-                    "D. Menjadi diplomat perempuan pertama Indonesia",
-                    "E. Mendirikan organisasi perempuan anti-kolonial"
-                ],
-                correctAnswer: 2,
-                correctAnswer: 2,
-                explanation: "Martha Christina Tiahahu adalah pejuang perempuan dari Maluku yang berperan dalam perlawanan terhadap Belanda di Pulau Nusa Laut bersama ayahnya, Kapitan Paulus Tiahahu."
-            },
-            {
-                question: "Penyebab utama meletusnya Perang Batak (1878-1907) dipimpin oleh Sisingamangaraja XII adalah...",
-                options: [
-                    "A. Perlawanan terhadap penyebaran agama Kristen",
-                    "B. Penolakan terhadap sistem tanam paksa kopi",
-                    "C. Keinginan Belanda menguasai daerah perkebunan tembakau",
-                    "D. Perebutan wilayah dengan Kesultanan Aceh",
-                    "E. Perlawanan terhadap monopoli garam oleh Belanda"
-                ],
-                correctAnswer: 1,
-                explanation: "Perang Batak terutama dipicu oleh penolakan terhadap sistem tanam paksa kopi dan upaya Belanda menguasai wilayah Toba yang strategis."
-            },
-            {
-                question: "Peran Tuanku Imam Bonjol dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Aceh",
-                    "B. Minangkabau",
-                    "C. Banten",
-                    "D. Maluku",
-                    "E. Bali"
-                ],
-                correctAnswer: 1,
-                explanation: "Tuanku Imam Bonjol adalah pemimpin utama dalam Perang Padri yang berpusat di Bonjol, Minangkabau, melawan Belanda."
-            },
-            {
-                question: "Penyebab utama meletusnya Perang Bali (1846-1849) adalah...",
-                options: [
-                    "A. Penolakan kerajaan-kerajaan Bali terhadap hak tawan karang",
-                    "B. Perlawanan terhadap penyebaran agama Islam",
-                    "C. Perebutan wilayah dengan Kesultanan Mataram",
-                    "D. Penolakan terhadap sistem monopoli perdagangan VOC",
-                    "E. Persaingan dengan Portugis di Nusantara"
-                ],
-                correctAnswer: 0,
-                explanation: "Perang Bali terutama dipicu oleh penolakan kerajaan-kerajaan Bali terhadap tuntutan Belanda untuk menghapus hak tawan karang (hak kerajaan untuk menyita kapal yang terdampar)."
-            },
-            {
-                question: "Peran Cut Nyak Dien dalam perlawanan terhadap Belanda adalah...",
-                options: [
-                    "A. Memimpin pasukan perempuan di Jawa Barat",
-                    "B. Menjadi panglima perang di Aceh",
-                    "C. Menyusun strategi diplomasi dengan Belanda",
-                    "D. Mendirikan sekolah untuk anak-anak pejuang",
-                    "E. Menjadi penasihat militer Pangeran Diponegoro"
-                ],
-                correctAnswer: 1,
-                explanation: "Cut Nyak Dien adalah pemimpin perlawanan Aceh yang melanjutkan perjuangan setelah suaminya Teuku Umar gugur, dan memimpin perlawanan gerilya di pedalaman Aceh."
-            },
-            {
-                question: "Penyebab utama meletusnya Pemberontakan PKI 1926 adalah...",
-                options: [
-                    "A. Kekecewaan terhadap kebijakan pemerintah kolonial yang represif",
-                    "B. Pengaruh Revolusi Bolshevik di Rusia",
-                    "C. Perlawanan terhadap sistem tanam paksa",
-                    "D. Persaingan dengan organisasi pergerakan nasional lain",
-                    "E. Tekanan dari Comintern untuk melakukan revolusi"
-                ],
-                correctAnswer: 4,
-                explanation: "Pemberontakan PKI 1926 terutama dipicu oleh tekanan Comintern (organisasi komunis internasional) untuk melakukan revolusi proletar, meski kondisi Indonesia belum siap."
-            },
-            {
-                question: "Peran Pangeran Antasari dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Sumatra Barat",
-                    "B. Kalimantan Selatan",
-                    "C. Sulawesi Utara",
-                    "D. Maluku",
-                    "E. Nusa Tenggara Timur"
-                ],
-                correctAnswer: 1,
-                explanation: "Pangeran Antasari memimpin Perang Banjar melawan Belanda di Kalimantan Selatan pada pertengahan abad ke-19."
-            },
-            {
-                question: "Penyebab utama meletusnya Perang Jawa (1825-1830) adalah...",
-                options: [
-                    "A. Penolakan Pangeran Diponegoro terhadap campur tangan Belanda dalam urusan keraton",
-                    "B. Perlawanan terhadap penyebaran agama Kristen",
-                    "C. Perebutan tahta Kesultanan Yogyakarta",
-                    "D. Penolakan terhadap sistem pajak tanah",
-                    "E. Persaingan dengan Kesultanan Surakarta"
-                ],
-                correctAnswer: 0,
-                explanation: "Sebab utama Perang Jawa adalah penolakan Pangeran Diponegoro terhadap campur tangan Belanda dalam urusan keraton dan pemasangan patok oleh Belanda yang melintasi makam leluhurnya."
-            },
-            {
-                question: "Peran Sultan Agung dalam melawan VOC terutama terjadi di wilayah...",
-                options: [
-                    "A. Sumatra Utara",
-                    "B. Jawa Tengah",
-                    "C. Sulawesi Selatan",
-                    "D. Maluku",
-                    "E. Kalimantan Barat"
-                ],
-                correctAnswer: 1,
-                explanation: "Sultan Agung dari Mataram melakukan serangan terhadap VOC di Batavia pada tahun 1628 dan 1629, meski akhirnya gagal mengusir Belanda dari Jawa."
-            },
-            {
-                question: "Penyebab utama kegagalan Perjanjian Renville (1948) adalah...",
-                options: [
-                    "A. Penolakan Belanda untuk mengakui kedaulatan RI",
-                    "B. Wilayah RI yang semakin sempit hanya meliputi Yogyakarta",
-                    "C. Tidak adanya pengakuan internasional terhadap perjanjian tersebut",
-                    "D. Penolakan Amerika Serikat sebagai mediator",
-                    "E. Perselisihan antara Soekarno dan Hatta"
-                ],
-                correctAnswer: 1,
-                explanation: "Perjanjian Renville dianggap merugikan RI karena wilayahnya semakin sempit dan harus mengosongkan kantong-kantong gerilya di wilayah pendudukan Belanda, yang kemudian memicu ketidakpuasan."
-            },
-            {
-                question: "Peran Teuku Umar dalam perlawanan terhadap Belanda adalah...",
-                options: [
-                    "A. Memimpin pasukan gerilya di Jawa Barat",
-                    "B. Melakukan strategi tipu muslihat terhadap Belanda di Aceh",
-                    "C. Menjadi diplomat Aceh ke Turki Utsmani",
-                    "D. Mendirikan sekolah militer pertama di Aceh",
-                    "E. Menyusun perjanjian damai dengan Belanda"
-                ],
-                correctAnswer: 1,
-                explanation: "Teuku Umar terkenal dengan strategi 'Hindia Belanda' dimana ia berpura-pura bekerjasama dengan Belanda untuk mendapatkan senjata dan pelatihan, kemudian berbalik melawan Belanda."
-            },
-            {
-                question: "Penyebab utama meletusnya Konfrontasi Indonesia-Malaysia (1963-1966) adalah...",
-                options: [
-                    "A. Penolakan Indonesia terhadap pembentukan Federasi Malaysia yang dianggap pro-Barat",
-                    "B. Perebutan wilayah Kalimantan antara Indonesia dan Malaysia",
-                    "C. Persaingan ekonomi dalam produksi karet dan timah",
-                    "D. Dukungan Malaysia terhadap pemberontakan DI/TII",
-                    "E. Konflik perbatasan di Pulau Sipadan dan Ligitan"
-                ],
-                correctAnswer: 0,
-                explanation: "Konfrontasi terutama dipicu oleh penolakan Soekarno terhadap pembentukan Federasi Malaysia yang dianggap sebagai boneka Inggris/neokolonialisme di Asia Tenggara."
-            },
-            {
-                question: "Peran Sultan Nuku dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Maluku Utara",
-                    "B. Jawa Timur",
-                    "C. Sumatra Barat",
-                    "D. Kalimantan Timur",
-                    "E. Nusa Tenggara Barat"
-                ],
-                correctAnswer: 0,
-                explanation: "Sultan Nuku (Sultan Muhammad al-Mabus Amiruddin Syah) memimpin perlawanan di Tidore dan Maluku Utara melawan VOC pada akhir abad ke-18."
-            },
-            {
-                question: "Penyebab utama meletusnya Pemberontakan Andi Azis (1950) adalah...",
-                options: [
-                    "A. Penolakan terhadap pembentukan Negara Indonesia Timur",
-                    "B. Keinginan mempertahankan Negara Indonesia Timur dan menentang integrasi ke RI",
-                    "C. Perlawanan terhadap dominasi Jawa dalam pemerintahan",
-                    "D. Protes terhadap pembubaran KNIL",
-                    "E. Penentangan terhadap sistem demokrasi liberal"
-                ],
-                correctAnswer: 1,
-                explanation: "Pemberontakan Andi Azis dipicu oleh keinginan mempertahankan Negara Indonesia Timur dan menentang integrasi ke Republik Indonesia setelah pengakuan kedaulatan."
-            },
-            {
-                question: "Peran Sultan Mahmud Badaruddin II dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Palembang",
-                    "B. Banten",
-                    "C. Banjarmasin",
-                    "D. Makassar",
-                    "E. Maluku"
-                ],
-                correctAnswer: 0,
-                explanation: "Sultan Mahmud Badaruddin II memimpin perlawanan terhadap Inggris dan Belanda di Palembang pada awal abad ke-19 sebelum akhirnya ditangkap dan diasingkan."
-            },
-            {
-                question: "Penyebab utama meletusnya Peristiwa Westerling di Sulawesi Selatan (1946-1947) adalah...",
-                options: [
-                    "A. Upaya Belanda untuk menekan perlawanan rakyat Sulawesi terhadap kembalinya Belanda",
-                    "B. Konflik antara KNIL dan TNI di wilayah Sulawesi",
-                    "C. Perlawanan terhadap pembentukan Negara Indonesia Timur",
-                    "D. Persaingan antara kelompok pro-Republik dan pro-federal",
-                    "E. Pembalasan terhadap kekalahan Belanda di Jawa"
-                ],
-                correctAnswer: 0,
-                explanation: "Pasukan Depot Speciale Troepen pimpinan Westerling melakukan pembunuhan massal terhadap ribuan orang di Sulawesi Selatan untuk menekan perlawanan rakyat terhadap kembalinya kekuasaan Belanda."
-            },
-            {
-                question: "Peran Raja Haji Fisabilillah dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Riau",
-                    "B. Aceh",
-                    "C. Jawa Barat",
-                    "D. Kalimantan Selatan",
-                    "E. Maluku"
-                ],
-                correctAnswer: 0,
-                explanation: "Raja Haji Fisabilillah dari Kesultanan Riau-Lingga memimpin perlawanan terhadap VOC di wilayah Riau pada akhir abad ke-18 sebelum gugur dalam pertempuran di Melaka."
-            },
-            {
-                question: "Penyebab utama meletusnya Pemberontakan DI/TII di Jawa Barat (1949-1962) adalah...",
-                options: [
-                    "A. Penolakan terhadap hasil Perjanjian Renville",
-                    "B. Keinginan mendirikan negara Islam Indonesia",
-                    "C. Protes terhadap pembubaran tentara Hizbullah",
-                    "D. Perlawanan terhadap sistem demokrasi liberal",
-                    "E. Penentangan terhadap dominasi Jawa dalam politik"
-                ],
-                correctAnswer: 1,
-                explanation: "Pemberontakan DI/TII Kartosuwiryo terutama dipicu oleh keinginan mendirikan Negara Islam Indonesia setelah penolakannya terhadap hasil Perjanjian Renville dan Proklamasi RI yang sekuler."
-            },
-            {
-                question: "Peran Sultan Ageng Tirtayasa dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Banten",
-                    "B. Mataram",
-                    "C. Maluku",
-                    "D. Sumatra Barat",
-                    "E. Kalimantan Barat"
-                ],
-                correctAnswer: 0,
-                explanation: "Sultan Ageng Tirtayasa memimpin perlawanan Kesultanan Banten terhadap VOC pada abad ke-17 sebelum akhirnya ditangkap dan diasingkan."
-            },
-            {
-                question: "Penyebab utama meletusnya Peristiwa 7 Oktober 1952 adalah...",
-                options: [
-                    "A. Konflik antara Angkatan Darat dengan Presiden Soekarno",
-                    "B. Kudeta militer terhadap pemerintahan sipil",
-                    "C. Protes terhadap hasil Pemilu 1955",
-                    "D. Persaingan antara TNI dan KNIL",
-                    "E. Penentangan terhadap sistem demokrasi parlementer"
-                ],
-                correctAnswer: 0,
-                explanation: "Peristiwa 7 Oktober 1952 merupakan puncak ketegangan antara pimpinan Angkatan Darat (A.H. Nasution) dengan Soekarno mengenai kebijakan reorganisasi militer dan campur tangan sipil dalam urusan militer."
-            },
-            {
-                question: "Peran Untung Surapati dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Jawa Timur",
-                    "B. Sumatra Utara",
-                    "C. Sulawesi Selatan",
-                    "D. Bali",
-                    "E. Kalimantan Timur"
-                ],
-                correctAnswer: 0,
-                explanation: "Untung Surapati, mantan budak Belanda, memimpin perlawanan terhadap VOC di Jawa Timur pada akhir abad ke-17 dengan basis di Pasuruan."
-            },
-            {
-                question: "Penyebab utama meletusnya Peristiwa Cikini (1957) adalah...",
-                options: [
-                    "A. Upaya pembunuhan terhadap Presiden Soekarno",
-                    "B. Konflik antara TNI dan organisasi pemuda",
-                    "C. Protes terhadap nasionalisasi perusahaan Belanda",
-                    "D. Persaingan antara partai politik di Jakarta",
-                    "E. Penentangan terhadap Demokrasi Terpimpin"
-                ],
-                correctAnswer: 0,
-                explanation: "Peristiwa Cikini adalah upaya pembunuhan terhadap Soekarno dengan granat saat sedang menghadiri acara di sekolah Cikini, yang didalangi oleh kelompok anti-Soekarno."
-            },
-            {
-                question: "Peran Pangeran Jayakarta dalam perlawanan terhadap Belanda terutama terjadi di wilayah...",
-                options: [
-                    "A. Batavia (Jakarta)",
-                    "B. Banten",
-                    "C. Cirebon",
-                    "D. Surabaya",
-                    "E. Semarang"
-                ],
-                correctAnswer: 0,
-                explanation: "Pangeran Jayakarta (Pangeran Achmad Jakerta) memimpin perlawanan terhadap VOC di wilayah Jayakarta (Batavia) pada awal abad ke-17 sebelum akhirnya terdesak ke daerah sekitar."
-            }
+                        question: "Pengaruh Revolusi Prancis terhadap pergerakan nasional Indonesia adalah...",
+                        options: [
+                            "A. Munculnya ide liberalisme dan nasionalisme",
+                            "B. Penyebaran agama Kristen di Indonesia",
+                            "C. Masuknya sistem feodalisme di Indonesia",
+                            "D. Penguatan sistem kolonial Belanda",
+                            "E. Penyatuan seluruh wilayah Nusantara"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Revolusi Prancis (1789) menyebarkan ide-ide liberalisme, nasionalisme, dan demokrasi yang memengaruhi munculnya pergerakan nasional di Indonesia pada awal abad 20."
+                    },
+                    {
+                        question: "Politik Etis yang diterapkan Belanda di Indonesia terdiri dari...",
+                        options: [
+                            "A. Irigasi, Emigrasi, dan Edukasi",
+                            "B. Ekstirpasi, Cultuurstelsel, dan Romusha",
+                            "C. Devide et Impera, Tanam Paksa, dan Kerja Rodi",
+                            "D. Kolonialisme, Imperialisme, dan Kapitalisme",
+                            "E. Asimilasi, Akulturasi, dan Integrasi"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Politik Etis (Balas Budi) yang diusulkan Van Deventer terdiri dari Irigasi (pengairan), Emigrasi (perpindahan penduduk), dan Edukasi (pendidikan). Namun pelaksanaannya banyak menyimpang."
+                    },
+                    {
+                        question: "Perbedaan utama antara Indische Partij dengan organisasi pergerakan sebelumnya adalah...",
+                        options: [
+                            "A. Beranggotakan pribumi dan Eropa",
+                            "B. Bertujuan mencapai kemerdekaan Indonesia",
+                            "C. Dipimpin oleh tiga serangkai",
+                            "D. Menggunakan media cetak sebagai propaganda",
+                            "E. Semua jawaban benar"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Indische Partij (1912) adalah organisasi pertama yang secara terang-terangan menuntut kemerdekaan Indonesia, berbeda dengan organisasi sebelumnya yang hanya menuntut perbaikan nasib."
+                    },
+                    {
+                        question: "Peristiwa penting yang terjadi setelah Proklamasi Kemerdekaan 17 Agustus 1945 adalah...",
+                        options: [
+                            "A. Pembentukan KNIP",
+                            "B. Penyusunan UUD 1945",
+                            "C. Pengangkatan Presiden dan Wakil Presiden",
+                            "D. Pembentukan kabinet pertama",
+                            "E. Semua jawaban benar"
+                        ],
+                        correctAnswer: 4,
+                        explanation: "Setelah proklamasi, terjadi serangkaian peristiwa penting: penyusunan UUD 1945 (18 Agustus), pengangkatan Soekarno-Hatta sebagai Presiden-Wakil Presiden, pembentukan KNIP, dan pembentukan kabinet pertama."
+                    },
+                    {
+                        question: "Perjanjian Linggarjati (1947) berisi tentang...",
+                        options: [
+                            "A. Pengakuan Belanda atas RI meliputi Jawa, Madura, dan Sumatera",
+                            "B. Pembentukan negara federal RIS",
+                            "C. Penyerahan kedaulatan tanpa syarat",
+                            "D. Pengakuan Belanda atas RI meliputi Jawa dan Madura",
+                            "E. Gencatan senjata antara Indonesia-Belanda"
+                        ],
+                        correctAnswer: 3,
+                        explanation: "Perjanjian Linggarjati (1946) berisi pengakuan Belanda atas RI de facto meliputi Jawa, Madura, dan Sumatera, serta pembentukan RIS bersama Belanda dalam uni Indonesia-Belanda."
+                    },
+                    {
+                        question: "Penyebab utama kegagalan sistem liberal (1950-1957) di Indonesia adalah...",
+                        options: [
+                            "A. Dominasi partai politik dalam pemerintahan",
+                            "B. Ketidakstabilan politik dan seringnya pergantian kabinet",
+                            "C. Campur tangan militer dalam politik",
+                            "D. Ekonomi yang tidak kunjung membaik",
+                            "E. Semua jawaban benar"
+                        ],
+                        correctAnswer: 4,
+                        explanation: "Sistem liberal gagal karena kombinasi faktor: dominasi partai politik, ketidakstabilan politik (7 kabinet dalam 7 tahun), ekonomi yang buruk, dan campur tangan militer yang menginginkan sistem yang lebih stabil."
+                    },
+                    {
+                        question: "Dekrit Presiden 5 Juli 1959 dikeluarkan karena...",
+                        options: [
+                            "A. Kegagalan Konstituante menyusun UUD baru",
+                            "B. Ancaman pemberontakan PRRI/Permesta",
+                            "C. Kebutuhan akan pemerintahan yang stabil",
+                            "D. Keinginan untuk kembali ke UUD 1945",
+                            "E. Semua jawaban benar"
+                        ],
+                        correctAnswer: 4,
+                        explanation: "Dekrit Presiden dikeluarkan karena Konstituante gagal menyusun UUD baru, situasi politik yang tidak stabil, ancaman disintegrasi, dan keinginan untuk kembali ke UUD 1945 yang dianggap lebih cocok."
+                    },
+                    {
+                        question: "Penyebab utama konfrontasi Indonesia-Malaysia (1963-1966) adalah...",
+                        options: [
+                            "A. Keberatan Indonesia terhadap pembentukan Federasi Malaysia",
+                            "B. Sengketa wilayah Kalimantan Utara",
+                            "C. Dukungan Malaysia terhadap PRRI/Permesta",
+                            "D. Campur tangan Inggris di Asia Tenggara",
+                            "E. Semua jawaban benar"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "Konfrontasi terjadi karena Indonesia menentang pembentukan Federasi Malaysia yang dianggap sebagai proyek neokolonialisme Inggris yang mengancam revolusi Indonesia."
+                    },
+                    {
+                        question: "Tragedi Trisakti (1998) menjadi pemicu utama...",
+                        options: [
+                            "A. Reformasi 1998",
+                            "B. Kudeta militer",
+                            "C. Pembentukan kabinet reformasi",
+                            "D. Pemilu demokratis pertama",
+                            "E. Turunnya Soeharto dari jabatan presiden"
+                        ],
+                        correctAnswer: 4,
+                        explanation: "Tragedi Trisakti (12 Mei 1998) dimana 4 mahasiswa tewas ditembak memicu gelombang demonstrasi besar-besaran yang berujung pada pengunduran diri Soeharto pada 21 Mei 1998."
+                    },
+                    {
+                        question: "Perubahan mendasar setelah amandemen UUD 1945 adalah...",
+                        options: [
+                            "A. Pembatasan masa jabatan presiden",
+                            "B. Pemilihan presiden secara langsung",
+                            "C. Penguatan checks and balances antar lembaga negara",
+                            "D. Penegasan Indonesia sebagai negara hukum",
+                            "E. Semua jawaban benar"
+                        ],
+                        correctAnswer: 4,
+                        explanation: "Amandemen UUD 1945 (1999-2002) membawa perubahan mendasar: pembatasan jabatan presiden (maksimal 2 periode), pemilihan langsung, checks and balances, dan penegasan Indonesia sebagai negara hukum."
+                    }
                 ]
             }
         };
@@ -3201,10 +1866,10 @@
         // Motivational messages based on score
         const MOTIVATIONAL_MESSAGES = {
             '90-100': 'Sempurna! Anda sangat luar biasa dalam menguasai materi sejarah. Pertahankan prestasi ini.',
-            '80-89': 'Hasil yang sangat baik! Anda telah menunjukkan pemahaman yang mendalam tentang sejarah.',
+            '80-89': 'Hasil yang sangat baik! Anda telah menunjukkan pemahaman yang mendalam tentang sejarah Indonesia.',
             '70-79': 'Kerja bagus! Anda memiliki pemahaman yang baik tentang materi sejarah ini.',
             '60-69': 'Hasil yang cukup baik. Tingkatkan lagi pemahaman Anda untuk hasil yang lebih baik.',
-            '50-59': 'Anda sudah memahami dasar-dasarnya. Terus berlatih untuk meningkatkan pemahaman sejarah Anda.',
+            '50-59': 'Anda sudah memahami dasar-dasarnya. Terus berlatih untuk meningkatkan pemahaman sejarah.',
             '0-49': 'Jangan menyerah! Gunakan hasil ini sebagai motivasi untuk belajar sejarah lebih giat lagi.'
         };
         
@@ -3426,7 +2091,7 @@
                 radio.addEventListener('change', showGradeSelection);
             });
             
-            document.getElementById('save-participant-btn').addEventListener('click', startExam);
+            document.getElementById('save-participant-btn').addEventListener('click', validateAndStartExam);
             document.getElementById('finish-exam-btn').addEventListener('click', finishExam);
             document.getElementById('skip-question-btn').addEventListener('click', skipQuestion);
             document.getElementById('unanswered-btn').addEventListener('click', showUnansweredQuestions);
@@ -3448,22 +2113,49 @@
             document.getElementById('fullname').addEventListener('input', function() {
                 // Convert input to uppercase automatically
                 this.value = this.value.toUpperCase();
+                validateField(this, 'fullname-error', /^[A-Za-z ]+$/, "Nama lengkap harus diisi dan hanya boleh mengandung huruf");
                 checkParticipantFormValidity();
             });
             
-            document.getElementById('school-name').addEventListener('input', checkParticipantFormValidity);
-            document.getElementById('student-id').addEventListener('input', checkParticipantFormValidity);
+            document.getElementById('school-name').addEventListener('input', function() {
+                validateField(this, 'school-error', /.+/, "Nama sekolah harus diisi");
+                checkParticipantFormValidity();
+            });
+            
+            document.getElementById('student-id').addEventListener('input', function() {
+                validateField(this, 'nis-error', /^[0-9]+$/, "NIS harus diisi dan hanya boleh mengandung angka");
+                checkParticipantFormValidity();
+            });
+            
             document.querySelectorAll('input[name="purpose"]').forEach(radio => {
-                radio.addEventListener('change', checkParticipantFormValidity);
+                radio.addEventListener('change', function() {
+                    document.getElementById('purpose-error').style.display = 'none';
+                    document.getElementById('purpose-radio-group').classList.remove('radio-group-error');
+                    checkParticipantFormValidity();
+                });
             });
+            
             document.querySelectorAll('input[name="level"]').forEach(radio => {
-                radio.addEventListener('change', checkParticipantFormValidity);
+                radio.addEventListener('change', function() {
+                    document.getElementById('level-error').style.display = 'none';
+                    document.getElementById('level-radio-group').classList.remove('radio-group-error');
+                    checkParticipantFormValidity();
+                });
             });
+            
             document.querySelectorAll('input[name="grade"]').forEach(radio => {
-                radio.addEventListener('change', checkParticipantFormValidity);
+                radio.addEventListener('change', function() {
+                    document.getElementById('grade-error').style.display = 'none';
+                    checkParticipantFormValidity();
+                });
             });
+            
             document.querySelectorAll('input[name="subject"]').forEach(radio => {
-                radio.addEventListener('change', checkParticipantFormValidity);
+                radio.addEventListener('change', function() {
+                    document.getElementById('subject-error').style.display = 'none';
+                    document.getElementById('subject-radio-group').classList.remove('radio-group-error');
+                    checkParticipantFormValidity();
+                });
             });
 
             // Admin panel toggle switches
@@ -3484,6 +2176,9 @@
             document.getElementById('edit-selected-participants').addEventListener('click', editSelectedParticipants);
             document.getElementById('delete-selected-participants').addEventListener('click', deleteSelectedParticipants);
             document.getElementById('validate-certificate-btn').addEventListener('click', validateCertificate);
+            document.getElementById('export-csv-btn').addEventListener('click', exportToCSV);
+            document.getElementById('export-json-btn').addEventListener('click', exportToJSON);
+            document.getElementById('export-excel-btn').addEventListener('click', exportToExcel);
             
             // Search functionality
             document.getElementById('participant-search').addEventListener('input', searchParticipants);
@@ -3497,9 +2192,6 @@
                 radio.addEventListener('change', showEditGradeSelection);
             });
             
-            // Load participants data for admin panel
-            loadParticipantsData();
-            
             // Auto uppercase for edit fullname field
             document.getElementById('edit-fullname').addEventListener('input', function() {
                 this.value = this.value.toUpperCase();
@@ -3511,13 +2203,6 @@
             // Load exam duration
             document.getElementById('exam-duration').value = adminSettings.examDuration;
             
-            // Load question count
-            document.getElementById('question-count').value = adminSettings.questionCount;
-            
-            // Load randomize questions setting
-            document.getElementById('randomize-questions').checked = adminSettings.randomizeQuestions;
-            document.getElementById('randomize-status').textContent = adminSettings.randomizeQuestions ? 'Aktif' : 'Nonaktif';
-            
             // Load greeting message
             document.getElementById('greeting-message-input').value = adminSettings.greetingMessage;
             
@@ -3528,16 +2213,16 @@
             document.getElementById('chairman-name').value = adminSettings.chairmanName;
             
             // Load subject toggle
-            document.getElementById('toggle-history').checked = adminSettings.enabledSubjects.Sejarah;
-            document.getElementById('history-status').textContent = adminSettings.enabledSubjects.Sejarah ? 'Aktif' : 'Nonaktif';
+            document.getElementById('toggle-history').checked = adminSettings.enabledSubjects["Sejarah"];
+            document.getElementById('history-status').textContent = adminSettings.enabledSubjects["Sejarah"] ? 'Aktif' : 'Nonaktif';
         }
         
         function saveParticipantsData() {
-            localStorage.setItem('participantsData', JSON.stringify(participantsData));
+            localStorage.setItem('pergunuParticipantsData', JSON.stringify(participantsData));
         }
         
         function saveAdminSettings() {
-            localStorage.setItem('adminSettings', JSON.stringify(adminSettings));
+            localStorage.setItem('pergunuAdminSettings', JSON.stringify(adminSettings));
         }
         
         function handleLogin() {
@@ -3637,42 +2322,92 @@
             container.appendChild(radioLabel);
         }
         
+        function validateField(field, errorId, pattern, errorMessage) {
+            const errorElement = document.getElementById(errorId);
+            
+            if (!field.value.trim() || !pattern.test(field.value.trim())) {
+                field.classList.add('input-error');
+                errorElement.textContent = errorMessage;
+                errorElement.style.display = 'block';
+                return false;
+            } else {
+                field.classList.remove('input-error');
+                errorElement.style.display = 'none';
+                return true;
+            }
+        }
+        
         function checkParticipantFormValidity() {
             let isValid = true;
             
-            // Check common fields
-            const fullname = document.getElementById('fullname').value.trim();
-            if (!fullname || !/^[A-Za-z ]+$/.test(fullname)) {
+            // Validate fullname
+            const fullname = document.getElementById('fullname');
+            if (!validateField(fullname, 'fullname-error', /^[A-Za-z ]+$/, "Nama lengkap harus diisi dan hanya boleh mengandung huruf")) {
                 isValid = false;
             }
             
-            // Check student fields
-            if (!document.getElementById('school-name').value.trim()) {
+            // Validate school name
+            const schoolName = document.getElementById('school-name');
+            if (!validateField(schoolName, 'school-error', /.+/, "Nama sekolah harus diisi")) {
                 isValid = false;
             }
             
-            const studentId = document.getElementById('student-id').value.trim();
-            if (!studentId || !/^[0-9]+$/.test(studentId)) {
+            // Validate student ID
+            const studentId = document.getElementById('student-id');
+            if (!validateField(studentId, 'nis-error', /^[0-9]+$/, "NIS harus diisi dan hanya boleh mengandung angka")) {
                 isValid = false;
             }
             
+            // Validate purpose
             if (!document.querySelector('input[name="purpose"]:checked')) {
+                document.getElementById('purpose-error').style.display = 'block';
+                document.getElementById('purpose-radio-group').classList.add('radio-group-error');
                 isValid = false;
             }
             
+            // Validate level
             if (!document.querySelector('input[name="level"]:checked')) {
+                document.getElementById('level-error').style.display = 'block';
+                document.getElementById('level-radio-group').classList.add('radio-group-error');
                 isValid = false;
             }
             
+            // Validate grade
             if (!document.querySelector('input[name="grade"]:checked')) {
+                document.getElementById('grade-error').style.display = 'block';
                 isValid = false;
             }
             
+            // Validate subject
             if (!document.querySelector('input[name="subject"]:checked')) {
+                document.getElementById('subject-error').style.display = 'block';
+                document.getElementById('subject-radio-group').classList.add('radio-group-error');
                 isValid = false;
             }
             
             document.getElementById('save-participant-btn').disabled = !isValid;
+            return isValid;
+        }
+        
+        function validateAndStartExam() {
+            if (checkParticipantFormValidity()) {
+                startExam();
+            } else {
+                // Show warning notification
+                const warning = document.getElementById('form-warning');
+                warning.style.display = 'block';
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    warning.style.display = 'none';
+                }, 5000);
+                
+                // Scroll to first error
+                const firstError = document.querySelector('.input-error, .radio-group-error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
         }
         
         function startExam() {
@@ -3686,22 +2421,23 @@
                 subject: document.querySelector('input[name="subject"]:checked')?.value,
                 school: document.getElementById('school-name')?.value.trim(),
                 studentId: document.getElementById('student-id')?.value.trim(),
-                examDate: new Date().toISOString()
+                examDate: new Date().toISOString(),
+                deviceInfo: getDeviceInfo()
             };
             
             // Load questions based on level - hanya Sejarah
             if (participantData.level && QUESTION_BANK[participantData.level]['Sejarah']) {
-                questions = QUESTION_BANK[participantData.level]['Sejarah'];
+                // Acak urutan soal
+                const originalQuestions = QUESTION_BANK[participantData.level]['Sejarah'];
+                questions = shuffleArray(originalQuestions);
+                
+                // Simpan urutan soal yang diacak
+                questionOrder = questions.map((_, index) => index);
             } else {
-                // Default questions
-                questions = QUESTION_BANK['SD']['Sejarah'];
-            }
-            
-            // Randomize questions if setting is enabled
-            if (adminSettings.randomizeQuestions) {
-                questions = shuffleArray(questions).slice(0, adminSettings.questionCount);
-            } else {
-                questions = questions.slice(0, adminSettings.questionCount);
+                // Default questions (SD)
+                const originalQuestions = QUESTION_BANK['SD']['Sejarah'];
+                questions = shuffleArray(originalQuestions);
+                questionOrder = questions.map((_, index) => index);
             }
             
             // Initialize exam data
@@ -3735,6 +2471,28 @@
             }, 500);
         }
         
+        // Fungsi untuk mendapatkan informasi perangkat
+        function getDeviceInfo() {
+            const userAgent = navigator.userAgent;
+            let deviceType = 'Desktop';
+            
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+                deviceType = 'Mobile';
+            } else if (/Tablet|iPad/i.test(userAgent)) {
+                deviceType = 'Tablet';
+            }
+            
+            return {
+                deviceType: deviceType,
+                userAgent: userAgent,
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                platform: navigator.platform,
+                language: navigator.language
+            };
+        }
+        
+        // Fungsi untuk mengacak array (Fisher-Yates algorithm)
         function shuffleArray(array) {
             const newArray = [...array];
             for (let i = newArray.length - 1; i > 0; i--) {
@@ -3812,8 +2570,9 @@
             currentQuestionIndex = index;
             const question = questions[index];
             
-            // Update question text
-            document.getElementById('question-text').textContent = `Soal ${index + 1}: ${question.question}`;
+            // Update question text (tampilkan nomor urut asli dari questionOrder)
+            const originalQuestionNumber = questionOrder[index] + 1;
+            document.getElementById('question-text').textContent = `Soal ${originalQuestionNumber}: ${question.question}`;
             
             // Clear previous image if exists
             const imageContainer = document.getElementById('question-image-container');
@@ -3921,7 +2680,7 @@
             }
         }
         
-        function finishExam() {
+        async function finishExam() {
             clearInterval(examTimer);
             
             // Calculate unanswered questions
@@ -3930,16 +2689,56 @@
             // Generate certificate code
             const certificateCode = generateUniqueCode();
             
-            // Add participant to data store
+            // Calculate score
             const score = Math.round((examData.correct / questions.length) * 100);
-            participantsData.push({
+            
+            // Add participant to data store
+            const participantRecord = {
                 ...participantData,
                 score: score,
                 examDate: new Date().toISOString(),
-                certificateCode: certificateCode
-            });
-            saveParticipantsData();
+                certificateCode: certificateCode,
+                answers: examData.answers,
+                questions: questions.map((q, i) => ({
+                    question: q.question,
+                    selectedAnswer: examData.answers[i],
+                    correctAnswer: q.correctAnswer,
+                    explanation: q.explanation
+                })),
+                deviceInfo: participantData.deviceInfo,
+                totalQuestions: questions.length,
+                correctAnswers: examData.correct,
+                wrongAnswers: examData.wrong,
+                unanswered: examData.unanswered
+            };
             
+            // Simpan ke Google Sheets dan localStorage
+            try {
+                // First try to save to Google Sheets
+                const saveResult = await saveToGoogleSheets(participantRecord);
+                
+                if (saveResult.success) {
+                    // If successful, save to localStorage as well
+                    participantsData.push(participantRecord);
+                    saveParticipantsData();
+                    
+                    // Show results
+                    showResults(participantRecord, certificateCode);
+                } else {
+                    // If Google Sheets fails, fallback to localStorage
+                    console.error('Failed to save to Google Sheets:', saveResult.message);
+                    saveToLocalStorage(participantRecord);
+                    showResults(participantRecord, certificateCode);
+                }
+            } catch (error) {
+                console.error('Error saving to Google Sheets:', error);
+                // Fallback to localStorage
+                saveToLocalStorage(participantRecord);
+                showResults(participantRecord, certificateCode);
+            }
+        }
+        
+        function showResults(participantRecord, certificateCode) {
             // Hide exam screen with slide out animation
             document.getElementById('exam-screen').classList.add('slide-out');
             
@@ -3951,7 +2750,7 @@
                 currentScreen = 'results';
                 
                 // Display results
-                displayResults();
+                displayResults(participantRecord);
                 
                 // Generate certificate
                 generateCertificate(certificateCode);
@@ -3964,20 +2763,78 @@
                 certificateSound.play().catch(e => console.log("Certificate sound prevented:", e));
             }, 500);
         }
-        
-        function displayResults() {
-            document.getElementById('result-name').textContent = participantData.fullname;
+
+        // Fungsi untuk mengirim data ke Google Sheets
+        async function saveToGoogleSheets(participantData) {
+            const dataToSend = {
+                action: 'saveParticipant',
+                data: {
+                    fullname: participantData.fullname,
+                    status: participantData.status,
+                    purpose: participantData.purpose,
+                    level: participantData.level,
+                    grade: participantData.grade,
+                    subject: participantData.subject,
+                    school: participantData.school,
+                    studentId: participantData.studentId,
+                    score: participantData.score,
+                    certificateCode: participantData.certificateCode,
+                    examDate: participantData.examDate,
+                    deviceType: participantData.deviceInfo?.deviceType || 'Unknown',
+                    totalQuestions: participantData.totalQuestions,
+                    correctAnswers: participantData.correctAnswers,
+                    wrongAnswers: participantData.wrongAnswers,
+                    unanswered: participantData.unanswered
+                }
+            };
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error saving to Google Sheets:', error);
+                throw error;
+            }
+        }
+
+        function saveToLocalStorage(participantData) {
+            const participantRecord = {
+                ...participantData,
+                totalQuestions: questions.length,
+                correctAnswers: examData.correct,
+                wrongAnswers: examData.wrong,
+                unanswered: examData.unanswered
+            };
+            
+            participantsData.push(participantRecord);
+            saveParticipantsData();
+        }
+            
+        function displayResults(participantRecord) {
+            document.getElementById('result-name').textContent = participantRecord.fullname;
             document.getElementById('result-status').textContent = 'Pelajar';
-            document.getElementById('result-level').textContent = participantData.level || '-';
-            document.getElementById('result-grade').textContent = participantData.grade ? `Kelas ${participantData.grade}` : '-';
-            document.getElementById('result-subject').textContent = participantData.subject || '-';
-            document.getElementById('total-questions').textContent = questions.length;
-            document.getElementById('correct-answers').textContent = examData.correct;
-            document.getElementById('wrong-answers').textContent = examData.wrong;
-            document.getElementById('unanswered-questions').textContent = examData.unanswered;
+            document.getElementById('result-level').textContent = participantRecord.level || '-';
+            document.getElementById('result-grade').textContent = participantRecord.grade ? `Kelas ${participantRecord.grade}` : '-';
+            document.getElementById('result-subject').textContent = participantRecord.subject || '-';
+            document.getElementById('total-questions').textContent = participantRecord.totalQuestions;
+            document.getElementById('correct-answers').textContent = participantRecord.correctAnswers;
+            document.getElementById('wrong-answers').textContent = participantRecord.wrongAnswers;
+            document.getElementById('unanswered-questions').textContent = participantRecord.unanswered;
             
             // Calculate score (percentage)
-            const score = Math.round((examData.correct / questions.length) * 100);
+            const score = Math.round((participantRecord.correctAnswers / participantRecord.totalQuestions) * 100);
             document.getElementById('exam-score').textContent = `${score}%`;
         }
         
@@ -4006,6 +2863,10 @@
                 }
             }
             
+            // Format NIS and school name for certificate code
+            const formattedNIS = participantData.studentId ? participantData.studentId : '0000';
+            const formattedSchool = participantData.school ? participantData.school.replace(/\s+/g, '-').toUpperCase().substring(0, 10) : 'SEKOLAH';
+            
             // Create certificate HTML
             const certificate = document.createElement('div');
             certificate.className = 'certificate';
@@ -4013,7 +2874,7 @@
             certificate.innerHTML = `
                 <div class="certificate-content">
                     <h1 class="certificate-title">SERTIFIKAT PRESTASI</h1>
-                    <p class="certificate-code">${formatName(participantData.fullname)}/PELAJAR/${participantData.level || 'UMUM'}/${participantData.subject || 'UMUM'}/${dateString}/${certificateCode}/PERGUNU-STB</p>
+                    <p class="certificate-code">${formatName(participantData.fullname)}/${formattedNIS}/${formattedSchool}/${participantData.level || 'UMUM'}/${participantData.subject || 'UMUM'}/${dateString}/${certificateCode}/PERGUNU-STB</p>
                     <p>Diberikan Kepada</p>
                     <h2 class="certificate-recipient">${formatName(participantData.fullname)}</h2>
                     <p class="certificate-body">
@@ -4021,8 +2882,8 @@
                         Ujian Sejarah Pergunu Situbondo
                     </p>
                     <p class="certificate-body">
-                        Sebagai penghargaan atas dedikasi dalam memahami materi sejarah dan mengasah pengetahuan sejarah,
-                        sertifikat ini diberikan sebagai motivasi untuk terus belajar dari masa lalu.
+                        Sebagai penghargaan atas dedikasi dalam memahami materi sejarah Indonesia dan menghargai perjuangan para pahlawan, 
+                        sertifikat ini diberikan sebagai motivasi untuk terus mempelajari sejarah bangsa.
                     </p>
                     <div class="certificate-score">Nilai: ${score}%</div>
                     <p class="certificate-motivation">${motivation}</p>
@@ -4128,6 +2989,8 @@
             if (code === adminSettings.adminCode) {
                 // Show admin panel content
                 document.getElementById('admin-panel-content').style.display = 'block';
+                // Load participants data
+                loadParticipantsData();
             } else {
                 alert('Kode admin salah. Silakan coba lagi.');
             }
@@ -4453,6 +3316,7 @@
                     <p>Mata Ujian: ${participant.subject || '-'}</p>
                     <p>Nilai: ${participant.score}%</p>
                     <p>Tanggal Ujian: ${new Date(participant.examDate).toLocaleDateString('id-ID')}</p>
+                    <p>Perangkat: ${participant.deviceInfo?.deviceType || 'Tidak diketahui'}</p>
                 `;
                 validationResult.style.display = 'block';
             } else {
@@ -4503,23 +3367,106 @@
         
         function saveSettings() {
             const examDuration = parseInt(document.getElementById('exam-duration').value);
-            const questionCount = parseInt(document.getElementById('question-count').value);
-            const randomizeQuestions = document.getElementById('randomize-questions').checked;
             
             // Update admin settings
             adminSettings.examDuration = examDuration;
-            adminSettings.questionCount = questionCount;
-            adminSettings.randomizeQuestions = randomizeQuestions;
             
             // Update subject toggle
             adminSettings.enabledSubjects = {
-                Sejarah: document.getElementById('toggle-history').checked
+                "Sejarah": document.getElementById('toggle-history').checked
             };
             
             // Save to localStorage
             saveAdminSettings();
             
             alert('Pengaturan berhasil disimpan!');
+        }
+        
+        function exportToCSV() {
+            if (participantsData.length === 0) {
+                alert('Tidak ada data peserta untuk diekspor');
+                return;
+            }
+            
+            // Create CSV header
+            let csv = 'Nama,NIS,Sekolah,Tingkat,Kelas,Subject,Nilai,Kode Sertifikat,Tanggal Ujian,Jenis Perangkat\n';
+            
+            // Add data rows
+            participantsData.forEach(participant => {
+                csv += `"${participant.fullname}","${participant.studentId || ''}","${participant.school || ''}",`;
+                csv += `"${participant.level || ''}","${participant.grade || ''}","${participant.subject || ''}",`;
+                csv += `"${participant.score}","${participant.certificateCode || ''}","${new Date(participant.examDate).toLocaleString('id-ID')}",`;
+                csv += `"${participant.deviceInfo?.deviceType || 'Tidak diketahui'}"\n`;
+            });
+            
+            // Create download link
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `data-peserta-${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function exportToJSON() {
+            if (participantsData.length === 0) {
+                alert('Tidak ada data peserta untuk diekspor');
+                return;
+            }
+            
+            // Create JSON data
+            const jsonData = JSON.stringify(participantsData, null, 2);
+            
+            // Create download link
+            const blob = new Blob([jsonData], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `data-peserta-${new Date().toISOString().slice(0,10)}.json`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function exportToExcel() {
+            if (participantsData.length === 0) {
+                alert('Tidak ada data peserta untuk diekspor');
+                return;
+            }
+            
+            // Prepare data for Excel
+            const excelData = [
+                ['Nama', 'NIS', 'Sekolah', 'Tingkat', 'Kelas', 'Mata Ujian', 'Nilai', 'Kode Sertifikat', 'Tanggal Ujian', 'Jenis Perangkat']
+            ];
+            
+            participantsData.forEach(participant => {
+                excelData.push([
+                    participant.fullname,
+                    participant.studentId || '',
+                    participant.school || '',
+                    participant.level || '',
+                    participant.grade || '',
+                    participant.subject || '',
+                    participant.score,
+                    participant.certificateCode || '',
+                    new Date(participant.examDate).toLocaleString('id-ID'),
+                    participant.deviceInfo?.deviceType || 'Tidak diketahui'
+                ]);
+            });
+            
+            // Create worksheet
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Data Peserta");
+            
+            // Export to Excel file
+            XLSX.writeFile(wb, `data-peserta-${new Date().toISOString().slice(0,10)}.xlsx`);
         }
     </script>
 </body>
